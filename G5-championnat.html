@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%234f8cff%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2728%27 font-family=%27sans-serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27white%27%3EG5%3C/text%3E%3C/svg%3E">
+<title>G5 — Championnat des motards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#07080f;--g1:rgba(79,140,255,.18);--g2:rgba(139,92,246,.16);--glass:rgba(255,255,255,.06);--glass2:rgba(255,255,255,.1);--line:rgba(255,255,255,.13);--txt:#eef1ff;--mut:#8b93b5;--blue:#4f8cff;--vio:#8b5cf6;--em:#2ee6a6;--gold:#ffc83d;--red:#ff5470;--amb:#ffa84d;--hd:'Chakra Petch','Arial Narrow',sans-serif;--bd:'Outfit',system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px)}
+[data-theme=light]{--bg:#eef1fa;--g1:rgba(79,140,255,.22);--g2:rgba(139,92,246,.14);--glass:rgba(255,255,255,.72);--glass2:rgba(255,255,255,.95);--line:rgba(20,30,70,.13);--txt:#14183a;--mut:#5b6290}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:var(--bd);background:var(--bg);color:var(--txt);min-height:100%;background-image:radial-gradient(900px 500px at 10% -10%,var(--g1),transparent),radial-gradient(800px 500px at 100% 10%,var(--g2),transparent);background-attachment:fixed}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h1,h2,h3,.hd{font-family:var(--hd);letter-spacing:.2px}
+.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px}
+small,.mut{color:var(--mut)}
+/* outils : thème + état réseau */
+.tools{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:80;display:flex;gap:8px;align-items:center}
+.tbtn{border:1px solid var(--line);background:var(--glass2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:99px;padding:7px 14px;font-weight:600;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+/* buttons */
+.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:600;background:linear-gradient(135deg,var(--blue),var(--vio));color:#fff;transition:transform .12s,box-shadow .2s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.btn:hover{box-shadow:0 0 22px rgba(79,140,255,.45)}.btn:active{transform:scale(.97)}
+.btn.em{background:linear-gradient(135deg,#1fcf8f,#14a37a)}.btn.red{background:linear-gradient(135deg,#ff5470,#d0304f)}
+.btn.ghost{background:var(--glass);border:1px solid var(--line);color:var(--txt)}.btn.sm{padding:6px 11px;font-size:12.5px}.btn.big{padding:15px 22px;font-size:16px;width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+input,select,textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
+[data-theme=light] input,[data-theme=light] select,[data-theme=light] textarea{background:rgba(255,255,255,.8)}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,140,255,.2)}
+select option{color:#111}
+label{font-size:12.5px;color:var(--mut);display:block;margin-bottom:5px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:600;border:1px solid var(--line);background:var(--glass)}
+.b-em{color:var(--em);border-color:rgba(46,230,166,.45);background:rgba(46,230,166,.1)}.b-red{color:var(--red);border-color:rgba(255,84,112,.45);background:rgba(255,84,112,.1)}
+.b-amb{color:var(--amb);border-color:rgba(255,168,77,.45);background:rgba(255,168,77,.1)}.b-blue{color:var(--blue);border-color:rgba(79,140,255,.5);background:rgba(79,140,255,.12)}
+.b-gold{color:var(--gold);border-color:rgba(255,200,61,.5);background:rgba(255,200,61,.12)}.b-vio{color:#b79bff;border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.12)}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lcard{width:min(420px,100%);padding:28px}
+.lcard h1{font-size:28px;margin:10px 0 2px}.logo{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;font:700 22px var(--hd);background:linear-gradient(135deg,var(--blue),var(--vio));box-shadow:0 0 30px rgba(79,140,255,.5)}
+.seg{display:flex;gap:4px;padding:4px;border-radius:12px;background:rgba(255,255,255,.05);margin:18px 0}.seg button{flex:1;border:0;background:none;padding:8px;border-radius:9px;color:var(--mut);font-weight:600}.seg .on{background:var(--glass2);color:var(--txt)}
+.fg{margin-bottom:13px}.err{color:var(--red);font-size:13px;min-height:18px;margin-bottom:6px}
+/* shell */
+#app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+#nav{position:sticky;top:0;height:100vh;padding:18px 12px;display:flex;flex-direction:column;gap:5px;border-right:1px solid var(--line);background:var(--glass);backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 16px}.brand b{font:700 20px var(--hd);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--vio))}
+.ni{display:flex;align-items:center;gap:11px;padding:11px 12px;border:1px solid transparent;border-radius:11px;background:none;text-align:left;color:var(--mut);font-weight:500;position:relative}
+.ni:hover{background:var(--glass)}.ni.on{color:var(--txt);background:var(--glass2);border-color:var(--line);box-shadow:inset 3px 0 0 var(--em)}
+.ni em{margin-left:auto;background:var(--red);color:#fff;font-style:normal;font-size:11px;padding:1px 7px;border-radius:99px}.ni.out{margin-top:auto}
+#view{padding:56px 24px 24px;min-width:0;max-width:1180px;width:100%;margin:0 auto}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:18px}.ph h1{font-size:26px}.ph p{color:var(--mut);font-size:14px;margin-top:3px}
+.card{padding:18px;margin-bottom:18px}.card h3{font-size:17px;margin-bottom:12px}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.kpi{padding:16px}.kpi small{display:block;font-size:12.5px}.kpi .v{font:700 24px var(--hd);margin-top:4px}.kpi .s{font-size:12px;color:var(--mut);margin-top:3px}
+.kpi.em .v{color:var(--em)}.kpi.amb .v{color:var(--amb)}.kpi.blue .v{color:var(--blue)}.kpi.gold .v{color:var(--gold)}
+/* leaderboard */
+.lbc{padding:18px 18px 8px;border-color:rgba(79,140,255,.35);box-shadow:0 0 40px rgba(79,140,255,.08)}
+.lbh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.lbh h2{font-size:21px}
+.pills{display:flex;gap:6px;padding:4px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.pill{border:0;background:none;padding:8px 16px;border-radius:99px;color:var(--mut);font:600 13px var(--hd);letter-spacing:.8px;text-transform:uppercase}
+.pill.on{background:linear-gradient(135deg,var(--blue),var(--vio));color:#fff;box-shadow:0 0 18px rgba(79,140,255,.65)}
+.note{display:flex;gap:8px;align-items:center;padding:9px 13px;border-radius:11px;font-size:13px;margin-bottom:12px;background:rgba(79,140,255,.1);border:1px solid rgba(79,140,255,.3)}
+.note.w{background:rgba(255,168,77,.1);border-color:rgba(255,168,77,.35)}.note.g{background:rgba(255,200,61,.1);border-color:rgba(255,200,61,.4)}
+.tw{overflow-x:auto;margin:0 -6px;padding:0 6px 10px}
+table{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:560px}
+th{font-size:11.5px;color:var(--mut);text-align:left;padding:4px 10px;font-weight:500;white-space:nowrap}
+td{padding:10px;background:rgba(255,255,255,.04);vertical-align:middle;font-size:14px}
+td:first-child{border-radius:12px 0 0 12px}td:last-child{border-radius:0 12px 12px 0}
+.num{font:600 15px var(--hd);white-space:nowrap}.gap{color:var(--red)}
+.lb td:first-child{width:54px;text-align:center;font:700 17px var(--hd)}
+.rk3{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;font-size:19px}
+.lb tr.lead td{background:linear-gradient(90deg,rgba(255,200,61,.17),rgba(255,200,61,.04));border-top:1px solid rgba(255,200,61,.55);border-bottom:1px solid rgba(255,200,61,.55)}
+.lb tr.lead td:first-child{border-left:1px solid rgba(255,200,61,.55)}.lb tr.lead td:last-child{border-right:1px solid rgba(255,200,61,.55)}
+.lb tr.me td{background:linear-gradient(90deg,rgba(46,230,166,.2),rgba(79,140,255,.1));border-top:1px solid rgba(46,230,166,.6);border-bottom:1px solid rgba(46,230,166,.6)}
+.lb tr.me td:first-child{border-left:1px solid rgba(46,230,166,.6)}.lb tr.me td:last-child{border-right:1px solid rgba(46,230,166,.6)}
+.pl{display:flex;align-items:center;gap:11px;min-width:150px}.pl img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--line)}
+.lead .pl img{border-color:var(--gold);box-shadow:0 0 14px rgba(255,200,61,.6)}.me .pl img{border-color:var(--em)}
+.pl b{display:block;font-size:14.5px}.pl small{font-size:12px}
+.bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.08);min-width:120px;margin-right:18px}
+.bar i{display:block;height:100%;border-radius:99px;background:repeating-linear-gradient(90deg,var(--blue) 0 10px,var(--vio) 10px 20px);transition:width .7s}
+.bar span{position:absolute;top:-9px;transform:translateX(-30%);font-size:17px;transition:left .7s}
+.empty{text-align:center;padding:40px 16px 46px}.empty .big{font-size:44px;margin-bottom:8px}.empty b{font:600 19px var(--hd)}.empty p{color:var(--mut);margin-top:5px}
+/* profile */
+.banner{height:150px;border-radius:18px;position:relative;overflow:hidden;background:linear-gradient(120deg,#13224f,#4b2c9a 55%,#0f7a63)}
+.banner:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 26px,rgba(255,255,255,.06) 26px 30px)}
+.banner .bd{position:absolute;right:14px;bottom:12px;display:flex;gap:8px;flex-wrap:wrap}
+.pg{display:grid;grid-template-columns:290px 1fr;gap:18px;margin-top:-62px;padding:0 14px;align-items:start}
+.idc{position:sticky;top:56px;padding:22px;text-align:center}
+.avw{position:relative;width:120px;height:120px;margin:0 auto 12px}.avw img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--em);box-shadow:0 0 24px rgba(46,230,166,.45)}
+.avedit{position:absolute;inset:0;border-radius:50%;border:0;background:rgba(0,0,0,.6);display:grid;place-items:center;font-size:26px;opacity:0;transition:opacity .2s;color:#fff}
+.avw:hover .avedit,.avedit:focus-visible{opacity:1}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--em);box-shadow:0 0 9px var(--em);margin-right:6px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.tabs button{border:1px solid var(--line);background:var(--glass);border-radius:99px;padding:8px 15px;color:var(--mut);font-weight:500}
+.tabs .on{color:var(--txt);border-color:var(--blue);box-shadow:0 0 14px rgba(79,140,255,.4)}
+.fl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fld{padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.fld label{display:flex;justify-content:space-between;margin-bottom:3px}.fld .val{font-weight:500;word-break:break-word;opacity:.92}
+.lock{cursor:help;position:relative;font-size:12px}
+.lock:hover:after,.lock:focus:after{content:attr(data-tip);position:absolute;right:0;bottom:130%;width:210px;padding:8px 10px;border-radius:9px;background:#1a1f3d;color:#eef1ff;border:1px solid var(--line);font-size:12px;z-index:5;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.sh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}.sh h3{margin:0}
+.cn{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:11px;background:rgba(255,255,255,.04);margin-bottom:6px;font-size:13.5px}
+/* trip */
+.live{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-radius:16px;margin-bottom:14px;background:linear-gradient(90deg,rgba(46,230,166,.2),rgba(79,140,255,.1));border:1px solid rgba(46,230,166,.5)}
+.live .pulse{width:12px;height:12px;border-radius:50%;background:var(--em);animation:pl 1.4s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(46,230,166,.7)}100%{box-shadow:0 0 0 14px rgba(46,230,166,0)}}
+.live .tm{font:700 26px var(--hd);margin-left:auto}
+.map{width:100%;height:320px;border-radius:14px;display:block;border:1px solid var(--line)}
+.tg{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:start}
+.pf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tot{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(79,140,255,.12);border:1px solid rgba(79,140,255,.35);margin:12px 0;font:600 17px var(--hd)}
+.pax{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);margin-bottom:8px}
+/* champion */
+.champ{text-align:center;padding:30px 18px;border-color:rgba(255,200,61,.6);background:radial-gradient(500px 260px at 50% 0,rgba(255,200,61,.2),transparent),var(--glass);box-shadow:0 0 50px rgba(255,200,61,.14)}
+.champ .cw{position:relative;width:170px;height:170px;margin:30px auto 14px}.champ .cw img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid var(--gold);box-shadow:0 0 36px rgba(255,200,61,.7)}
+.champ .cr{position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:46px}
+.champ h2{font-size:30px}.amt{font:700 34px var(--hd);color:var(--gold);margin:12px 0}
+/* modal + toast */
+.mod{position:fixed;inset:0;z-index:90;background:rgba(3,5,14,.7);backdrop-filter:blur(5px);display:grid;place-items:center;padding:16px;overflow:auto}
+.mbox{width:min(560px,100%);padding:22px;max-height:92vh;overflow:auto;background:#12162e;border-radius:18px}[data-theme=light] .mbox{background:#fff}
+.mbox h3{font-size:19px;margin-bottom:14px;display:flex;justify-content:space-between}.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0}.prs button{border:2px solid transparent;border-radius:50%;padding:0;background:none}.prs button.on{border-color:var(--em)}.prs img{width:100%;border-radius:50%;display:block}
+.spin{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:sp .7s linear infinite;display:inline-block}@keyframes sp{to{transform:rotate(1turn)}}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:99;background:#14183a;color:#fff;border:1px solid var(--em);padding:12px 20px;border-radius:12px;transition:.3s;max-width:90vw;box-shadow:0 0 24px rgba(46,230,166,.3)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.act{display:flex;gap:5px;flex-wrap:wrap}
+@media(max-width:880px){
+#app{grid-template-columns:1fr;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+#nav{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;z-index:60;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--line);overflow-x:auto;gap:2px;background:rgba(10,12,26,.88)}
+[data-theme=light] #nav{background:rgba(255,255,255,.92)}
+.brand{display:none}.ni{flex-direction:column;gap:2px;padding:6px 10px;font-size:11px;flex:1;min-width:64px;align-items:center;text-align:center;box-shadow:none!important}.ni.out{margin-top:0}.ni i{font-style:normal;font-size:18px}
+#view{padding:54px 14px 14px}.pg,.tg{grid-template-columns:1fr}.idc{position:static}.hm{display:none}.map{height:260px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* messagerie, appels, assistant, navigation */
+.hub{display:grid;grid-template-columns:300px 1fr;gap:14px;height:min(640px,calc(100vh - 240px));min-height:430px;margin-bottom:18px}
+.cl{overflow:auto;padding:8px}
+.ci{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:12px;border:1px solid transparent;background:none;text-align:left;color:var(--txt);margin-bottom:2px}
+.ci:hover{background:var(--glass)}.ci.on{background:var(--glass2);border-color:var(--line)}
+.ci img,.mini{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none}.mini{width:34px;height:34px}
+.ci div{min-width:0;flex:1}.ci b{display:block;font-size:14px}.ci small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci em{background:var(--em);color:#04281c;font-style:normal;font-weight:700;font-size:11px;padding:1px 7px;border-radius:99px}
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,140,255,.3),rgba(139,92,246,.3));font-size:19px;flex:none}
+.cv{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.ch{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--line)}.ch img{width:40px;height:40px;border-radius:50%;object-fit:cover}.bk{display:none}
+.ml{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.bb{max-width:80%;align-self:flex-start;display:flex;flex-direction:column;gap:3px}.bb.me{align-self:flex-end;align-items:flex-end}
+.bt{padding:10px 14px;border-radius:16px 16px 16px 4px;background:rgba(255,255,255,.08);border:1px solid var(--line);word-break:break-word}
+.bb.me .bt{border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#2f6bff,#6a3df0);border-color:transparent;color:#fff;box-shadow:0 0 18px rgba(79,140,255,.3)}
+.who,.mt{color:var(--mut);font-size:11.5px}.tk{letter-spacing:-2px;font-size:12px}.tk.rd{color:#5fd0ff}
+.rxs{display:flex;gap:6px}.rx{border:1px solid var(--line);background:var(--glass);border-radius:99px;padding:2px 10px;font-size:13px}.rx.on{border-color:var(--blue);background:rgba(79,140,255,.22)}
+.cmp{display:flex;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}.cmp.rec{background:rgba(255,84,112,.12)}
+.au{display:flex;align-items:center;gap:10px;min-width:min(250px,60vw)}.pb{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:inherit;flex:none}
+.wf{flex:1;display:flex;align-items:center;gap:2px;height:34px}.wf i{flex:1;min-width:2px;background:rgba(255,255,255,.35);border-radius:2px}.wf i.on{background:var(--em)}
+.spd{border:1px solid rgba(255,255,255,.4);background:none;border-radius:99px;font-size:11px;padding:2px 7px;color:inherit}
+.pd{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--em);box-shadow:0 0 7px var(--em);margin-right:6px}.pd.off{background:#6b7280;box-shadow:none}
+.callbar{position:sticky;top:0;z-index:48;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 150px 9px 16px;background:linear-gradient(90deg,#0f6b4f,#1d3e8f);color:#fff;border-bottom:1px solid var(--line)}
+.fab{position:fixed;right:18px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:70;width:58px;height:58px;border-radius:50%;border:0;font-size:25px;background:linear-gradient(135deg,var(--em),var(--blue));box-shadow:0 0 28px rgba(46,230,166,.55);animation:fp 2.6s infinite}
+@keyframes fp{0%,100%{box-shadow:0 0 0 0 rgba(46,230,166,.5)}50%{box-shadow:0 0 0 14px rgba(46,230,166,0)}}
+.astp{position:fixed;right:16px;bottom:calc(90px + env(safe-area-inset-bottom,0px));z-index:70;width:min(380px,calc(100vw - 32px));max-height:72vh;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:14px;background:#12162e;border-radius:18px}
+[data-theme=light] .astp,[data-theme=light] .mbox{background:#fff}
+.ah{display:flex;align-items:center;gap:6px}.al{overflow:auto;max-height:200px;min-height:60px;display:flex;flex-direction:column;gap:7px}
+.ab{padding:8px 12px;border-radius:13px;font-size:13.5px;max-width:90%}.ab.bot{background:rgba(255,255,255,.08);align-self:flex-start}.ab.me{background:linear-gradient(135deg,#2f6bff,#6a3df0);align-self:flex-end;color:#fff}.ab.live{opacity:.65}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:var(--glass);border-radius:99px;padding:4px 10px;font-size:12px}
+.chk{display:flex;align-items:center;gap:6px;font-size:12.5px;margin:0}.chk input{width:auto}.chk select{width:auto;padding:3px 6px}
+.nvb{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;margin-bottom:10px;background:linear-gradient(90deg,#16408f,#2b2f8f);color:#fff}.nvb .ic{font-size:30px}.nvb div{flex:1}.nvb small{display:block;opacity:.8}
+@media(max-width:880px){.hub{grid-template-columns:1fr;height:calc(100vh - 290px)}.hub.open .cl{display:none}.hub:not(.open) .cv{display:none}.bk{display:inline-flex}.fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.astp{bottom:calc(152px + env(safe-area-inset-bottom,0px))}.tg[style]{grid-template-columns:1fr!important}}
+.lvl{height:8px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}.lvl i{display:block;height:100%;width:0;background:var(--em);transition:width .1s}.stat{font-size:12.5px;color:var(--mut)}
+/* mode clair : compléments */
+[data-theme=light] td,[data-theme=light] .fld,[data-theme=light] .cn,[data-theme=light] .pax,[data-theme=light] .ab.bot{background:rgba(20,30,70,.05)}
+[data-theme=light] .pills,[data-theme=light] .seg{background:rgba(20,30,70,.06)}
+[data-theme=light] .bar,[data-theme=light] .lvl{background:rgba(20,30,70,.12)}
+[data-theme=light] .bt{background:rgba(20,30,70,.06)}
+[data-theme=light] .bt .wf i{background:rgba(20,30,70,.3)}[data-theme=light] .bb.me .bt .wf i{background:rgba(255,255,255,.45)}[data-theme=light] .bt .wf i.on{background:var(--em)}
+[data-theme=light] .bt .pb{background:rgba(20,30,70,.12)}[data-theme=light] .bb.me .bt .pb{background:rgba(255,255,255,.25)}
+[data-theme=light] .lb tr.me td{background:linear-gradient(90deg,rgba(46,230,166,.28),rgba(79,140,255,.12))}
+[data-theme=light] .lb tr.lead td{background:linear-gradient(90deg,rgba(255,200,61,.32),rgba(255,200,61,.08))}
+[data-theme=light] .tbtn{box-shadow:0 4px 14px rgba(20,30,70,.15)}
+</style>
+</head>
+<body>
+<div id="demo" class="tools"></div>
+<div id="callbar" class="callbar" hidden></div>
+
+<section id="login" hidden>
+ <div class="lcard glass">
+  <div class="logo">G5</div>
+  <h1>Championnat G5</h1>
+  <p class="mut" id="lsub">Connectez-vous pour accéder à votre espace.</p>
+  <div class="seg" id="sg"><button data-act="ltab" data-v="rider" class="on">Motard</button><button data-act="ltab" data-v="admin">Administrateur</button></div>
+  <form id="lf">
+   <div class="fg"><label id="l1">Identifiant motard</label><input id="lu" placeholder="Identifiant" autocomplete="username" required></div>
+   <div class="fg"><label>Mot de passe</label><input id="lp" type="password" placeholder="••••" autocomplete="current-password" required></div>
+   <div class="err" id="le"></div>
+   <button class="btn big" type="submit">Se connecter</button>
+  </form>
+  <form id="sf" hidden><div class="fg" style="margin-top:16px"><label>Identifiant administrateur (ex : ADMIN)</label><input id="si" autocomplete="username" required></div><div class="fg"><label>Téléphone</label><input id="sph" type="tel" placeholder="+243 …"></div><div class="fg"><label>E-mail (facultatif)</label><input id="sm" type="email"></div><div class="fg"><label>Mot de passe (8 caractères min.)</label><input id="sp" type="password" autocomplete="new-password" required></div><div class="fg"><label>Confirmer le mot de passe</label><input id="sp2" type="password" autocomplete="new-password" required></div><div class="err" id="se"></div><button class="btn big" type="submit">Créer le compte administrateur</button></form>
+ </div>
+</section>
+
+<div id="app" hidden><aside id="nav"></aside><main id="view"></main></div>
+<div id="modal" class="mod" hidden></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<button id="fab" class="fab" data-act="ast" aria-label="Assistant vocal" hidden>🎙️</button>
+<div id="ast" class="astp glass" hidden></div>
+
+<script>
+const KEY='G5_PROD_V1',DAY=864e5;
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>new Intl.NumberFormat('fr-FR').format(Math.round(n||0))+' FC';
+const tm=t=>new Date(t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const dt=t=>new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})+' '+tm(t);
+const hms=ms=>{const s=Math.floor(ms/1e3);return [s/3600|0,(s/60|0)%60,s%60].map(v=>String(v).padStart(2,'0')).join(':')};
+async function H(p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('g5|'+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return 'p:'+p}}
+const devName=()=>/Android/i.test(navigator.userAgent)?'Android':/iPhone|iPad/i.test(navigator.userAgent)?'iOS':'Navigateur';
+function dl(n,c,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:m+';charset=utf-8'}));a.download=n;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},600)}
+const csv=rows=>'\ufeff'+rows.map(r=>r.map(v=>typeof v==='number'?v:'"'+String(v??'').replace(/^([=+\-@])/,"'$1").replace(/"/g,'""')+'"').join(';')).join('\r\n');
+let S,PAGE,PER='cycle',PT='info',LR='rider',CB=null,AVM={},UPH=null;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!save.w){save.w=1;setTimeout(()=>{save.w=0},6000);try{toast("⚠️ Stockage de l'appareil plein ou bloqué : exportez une sauvegarde (Réglages).")}catch(_){}}}};
+const midnight=(t=Date.now())=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
+
+/* ---------- données ---------- */
+function seed(){return{admin:null,riders:[],rec:[],nextRec:1,comp:{startAt:null,days:30,frozen:null,paused:false,ended:false},trip:null,sess:null,theme:'dark',lastAmt:500,zones:[],log:[]}}
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||!S.riders)S=seed();ext(S);S.offline=false;document.documentElement.dataset.theme=S.theme||'dark'}
+const log=(act,flag)=>{S.log.unshift({ts:Date.now(),who:S.sess?(S.sess.role==='admin'?'ADMIN':S.sess.id):'SYSTÈME',act,flag:flag?1:0});S.log=S.log.slice(0,120)};
+
+/* ---------- avatars ---------- */
+const svgUri=s=>'data:image/svg+xml,'+encodeURIComponent(s);
+function av(r){if(r.photo)return r.photo;const h=[...r.id].reduce((a,c)=>a+c.charCodeAt(0)*7,0)%360;
+ return svgUri(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='hsl(${h} 80% 55%)'/><stop offset='1' stop-color='hsl(${(h+60)%360} 80% 32%)'/></linearGradient></defs><rect width='64' height='64' fill='url(#g)'/><text x='32' y='42' font-size='26' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='white'>${esc(r.first[0]+r.name[0]).toUpperCase()}</text></svg>`)}
+const PRS=['🏍️','🦁','🦅','⚡','🔥','🐺'];
+const prs=i=>svgUri(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='hsl(${i*55+200} 75% 50%)'/><stop offset='1' stop-color='hsl(${i*55+260} 75% 28%)'/></linearGradient></defs><rect width='64' height='64' fill='url(#g)'/><text x='32' y='43' font-size='30' text-anchor='middle'>${PRS[i]}</text></svg>`);
+function sq(img,size,z){const c=document.createElement('canvas');c.width=c.height=size;const s=Math.min(img.width,img.height)/z;c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,size,size);return c.toDataURL('image/jpeg',.85)}
+function readImg(f,cb){if(!f)return;if(!/image\/(jpeg|png)/.test(f.type)){toast('Format non pris en charge. Choisissez un fichier JPG ou PNG.');return}const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>cb(i);i.src=r.result};r.readAsDataURL(f)}
+
+/* ---------- état de la compétition & classement ---------- */
+const me=()=>S.riders.find(r=>r.id===S.sess.id);
+const rd=id=>S.riders.find(r=>r.id===id)||{id,first:'?',name:'Inconnu'};
+const full=r=>`${r.first} ${r.name}`;
+function compState(){const c=S.comp;if(!c.startAt)return'idle';if(c.ended||Date.now()>c.startAt+c.days*DAY)return'ended';return c.paused?'paused':'live'}
+function limit(){const c=S.comp;if(c.frozen)return c.frozen;const e=c.startAt+c.days*DAY;return c.startAt&&Date.now()>e?e:0}
+function board(per){if(S.sess&&S.sess.role==='rider'&&!online()&&S.snap&&S.snap[per])return S.snap[per].map(x=>({...x,r:rd(x.id)}));return calc(per)}
+function calc(per){const c=S.comp;if(!c.startAt)return[];const L=limit(),ref=L||Date.now();
+ const from=Math.max(c.startAt,per==='day'?midnight(ref):per==='week'?ref-7*DAY:0);
+ const rows=S.riders.filter(r=>r.status!=='Banni').map(r=>{const k=S.rec.filter(x=>x.rid===r.id&&x.st==='ok'&&x.ts>=from&&(!L||x.vat<=L));return{r,amt:k.reduce((a,x)=>a+x.val,0),n:k.length,pax:k.reduce((a,x)=>a+x.pax,0)}}).sort((a,b)=>b.amt-a.amt||a.r.id.localeCompare(b.r.id));
+ rows.forEach((x,i)=>{x.rk=i+1;x.gap=i?rows[i-1].amt-x.amt:0});return rows}
+const dayNo=()=>{const c=S.comp;return Math.min(c.days,Math.floor(((limit()||Date.now())-c.startAt)/DAY)+1)};
+function lbHTML(meId){
+ const st=compState(),c=S.comp;
+ let h=`<div class="glass lbc"><div class="lbh"><h2>🏁 Classement &amp; suivi des performances</h2><div class="pills" role="tablist">${[['day','Jour'],['week','Semaine'],['cycle','Cycle · '+c.days+' j']].map(([k,l])=>`<button class="pill ${PER===k?'on':''}" data-act="per" data-v="${k}" role="tab" aria-selected="${PER===k}">${l}</button>`).join('')}</div></div>`;
+ if(st==='idle')return h+`<div class="empty"><div class="big">🏁</div><b>Le championnat n'a pas encore commencé.</b><p>Restez connectés !</p></div></div>`;
+ h+=st==='paused'?`<div class="note w">⏸ Compétition en pause : le classement est figé jusqu'à la reprise.</div>`:st==='ended'?`<div class="note g">🏁 Cycle terminé : classement final figé.</div>`:`<div class="note">🟢 Jour ${dayNo()} sur ${c.days}. Seuls les montants validés par l'administration apparaissent ici.</div>`;
+ if(S.sess&&S.sess.role==='rider'&&!online())h+=`<div class="note w">📴 Hors-ligne : dernier classement connu${S.snap?' ('+tm(S.snap.at)+')':''}. Mise à jour automatique au retour du réseau.</div>`;const rows=board(PER),top=rows[0]?rows[0].amt:0;if(!rows.length)return h+'<div class="empty"><div class="big">🏍️</div><b>Aucun participant pour le moment.</b><p>Les motards inscrits apparaîtront ici.</p></div></div>';
+ h+=`<div class="tw"><table class="lb"><thead><tr><th>Rang</th><th>Participant</th><th class="hm">Piste</th><th class="hm">Courses</th><th>Recette</th><th>Écart</th><th>Statut</th></tr></thead><tbody>`;
+ rows.forEach(x=>{const lead=x.rk==1&&x.amt>0,mine=x.r.id===meId,w=top?x.amt/top*100:0;
+  const medal=lead?'<span class="rk3">👑</span>':x.rk==2&&x.amt?'<span class="rk3">🥈</span>':x.rk==3&&x.amt?'<span class="rk3">🥉</span>':x.rk;
+  const tags=(lead?'<span class="badge b-gold">LEADER</span> ':'')+(mine?'<span class="badge b-em">VOUS</span>':'')+(!lead&&!mine?(x.r.status==='En pause'?'<span class="badge b-amb">PAUSE</span>':'<span class="badge b-blue">ACTIF</span>'):'');
+  h+=`<tr class="${lead?'lead':''} ${mine?'me':''}"><td>${medal}</td><td><div class="pl"><img src="${av(x.r)}" alt=""><div><b>${esc(full(x.r))}</b><small>${x.r.id} · ${esc(x.r.moto)}</small></div></div></td><td class="hm"><div class="bar"><i style="width:${w}%"></i><span style="left:${w}%">🏍️</span></div></td><td class="hm">${x.n} · ${x.pax} pers.</td><td class="num">${money(x.amt)}</td><td class="num gap">${x.rk==1?'—':'-'+money(x.gap)}</td><td>${tags}</td></tr>`});
+ return h+`</tbody></table></div></div>`}
+
+/* ---------- pages motard ---------- */
+const V={};
+V.dash=()=>{const r=me(),st=compState(),b=board('cycle'),mine=b.find(x=>x.r.id===r.id),today=midnight();
+ const pend=S.rec.filter(x=>x.rid===r.id&&x.st==='wait');
+ return`<div class="ph"><div><h1>Bonjour ${esc(r.first)} 👋</h1><p>Voici l'état du championnat et de vos résultats.</p></div></div>${lbHTML(r.id)}
+ <div style="height:18px"></div><div class="grid g4">
+ <div class="glass kpi em"><small>Ma recette validée (cycle)</small><div class="v">${st==='idle'?'—':money(mine?mine.amt:0)}</div><div class="s">Publiée par l'administration</div></div>
+ <div class="glass kpi amb"><small>En attente de validation</small><div class="v">${money(pend.reduce((a,x)=>a+x.amount,0))}</div><div class="s">${pend.length} trajet(s) à valider · non classé</div></div>
+ <div class="glass kpi blue"><small>Ma position</small><div class="v">${st==='idle'||!mine?'—':'#'+mine.rk+' / '+b.length}</div><div class="s">${mine&&mine.rk>1?'Retard : '+money(mine.gap):'Cycle en cours'}</div></div>
+ <div class="glass kpi gold"><small>Trajets aujourd'hui</small><div class="v">${S.rec.filter(x=>x.rid===r.id&&x.ts>=today).length}</div><div class="s">Tous statuts confondus</div></div></div>`};
+const stB=s=>s==='ok'?'<span class="badge b-em">Validée</span>':s==='no'?'<span class="badge b-red">Rejetée</span>':'<span class="badge b-amb">En attente</span>';
+V.trip=()=>{const t=S.trip,r=me();
+ const hist=S.rec.filter(x=>x.rid===r.id).sort((a,b)=>b.ts-a.ts).slice(0,6);
+ const histH=`<div class="glass card"><h3>Mes derniers trajets</h3>${hist.length?hist.map(x=>`<div class="cn"><span>${dt(x.ts)} · ${x.km==null?'déclaration':x.pax+' pers.'}</span><span><b>${money(x.amount)}</b> ${stB(x.st)}${x.sync===false?' <span class="badge b-amb">🕓 À synchroniser</span>':''}</span></div>`).join(''):'<p class="mut">Aucun trajet pour le moment.</p>'}</div>`;
+ const decl=`<div class="glass card"><h3>🎙️ Saisie vocale de la journée</h3><p class="mut" style="font-size:13px;margin-bottom:10px">Dictez : « Aujourd'hui j'ai fait 12 courses, 45 000 francs, carburant 5000 francs, avenue Kasa-Vubu ».</p><button class="btn em" data-act="decl">🎙️ Dicter ma journée</button></div>`;
+ const mapc='';
+ if(!t)return`<div class="ph"><div><h1>Mon trajet</h1><p>Démarrez un trajet pour activer le suivi GPS et la saisie des passagers.</p></div></div>
+ <div class="glass card" style="text-align:center;padding:36px 18px"><div style="font-size:50px">🏍️</div><h3 style="margin:10px 0 6px">Prêt à rouler ?</h3><p class="mut" style="margin-bottom:18px">Votre position est suivie en temps réel, même sans connexion.</p><button class="btn em big" style="max-width:340px" data-act="tstart">▶ Démarrer le trajet</button></div><div class="grid g2">${decl}${mapc}</div>${histH}`;
+ const ab=t.groups.filter(g=>!g.drop),done=t.groups.filter(g=>g.drop),rev=sumd(done,g=>g.n*g.amt),L=t.pts[t.pts.length-1];
+ const zl=`<div class="glass card"><h3>🔥 Zones à forte demande</h3>${S.zones.length?S.zones.map(z=>{const d=L?Math.round(dist(L,z)):null;return`<div class="cn"><span><b>${esc(z.n)}</b> <span class="badge ${z.d==='forte'?'b-red':z.d==='moyenne'?'b-amb':'b-blue'}">${z.d}</span><br><small>${d==null?'—':d+' m'}</small></span><button class="btn sm ghost" data-act="dest" data-v="${esc(z.k)}">🧭 Y aller</button></div>`}).join(''):'<p class="mut" style="font-size:13px">Aucune zone définie par l\'administration.</p>'}</div>`;
+ return`<div class="ph"><div><h1>Mon trajet</h1></div></div>
+ <div class="live"><span class="pulse"></span><b class="hd" style="font-size:18px">🟢 TRAJET EN COURS</b><span class="badge" id="gl">📡 GPS : …</span>${online()?'':'<span class="badge b-amb">📴 Hors-ligne : tracé enregistré sur l\'appareil</span>'}<span class="tm" id="tmr">00:00:00</span></div>
+ <div class="tg"><div><div class="glass card"><h3>📍 Position en temps réel</h3><div class="nvb" id="nv" hidden></div><canvas id="map" class="map"></canvas>
+  <div class="grid" style="margin-top:12px;grid-template-columns:repeat(3,1fr)"><div class="glass kpi"><small>Distance</small><div class="v" id="kms">0 km</div></div><div class="glass kpi"><small>Vitesse</small><div class="v" id="spd">0 km/h</div></div><div class="glass kpi em"><small>Recette du trajet</small><div class="v">${money(rev)}</div></div></div>
+  <p class="mut" style="font-size:12px;margin-top:10px">Le suivi utilise le GPS de l'appareil : autorisez la localisation dans le navigateur.</p></div>${zl}</div>
+ <div><div class="glass card"><h3>➕ Prendre une personne</h3>
+  <div class="pf"><div><label>Nombre de personnes</label><input id="pn" type="number" min="1" max="4" value="1" data-in="calc"></div><div><label>Montant par personne (FC)</label><input id="pa" type="number" min="0" step="500" value="${S.lastAmt||500}" data-in="calc"></div></div>
+  <div class="tot"><span>Total</span><span id="tot">${money(S.lastAmt||500)}</span></div>
+  <button class="btn big" data-act="take">➕ Ajouter / Prendre une personne</button></div>
+ <div class="glass card"><h3>À bord (${sumd(ab,g=>g.n)})</h3>${ab.length?ab.map(g=>`<div class="pax"><span><b>${g.n} pers.</b> × ${money(g.amt)}<br><small>Prise à ${tm(g.at)}</small></span><span><b>${money(g.n*g.amt)}</b> <button class="btn sm em" data-act="drop" data-v="${g.id}">📍 Déposer</button></span></div>`).join(''):'<p class="mut">Personne à bord.</p>'}
+  ${done.length?`<small>Déjà déposés : ${sumd(done,g=>g.n)} pers. · ${money(rev)}</small>`:''}
+  <button class="btn red big" style="margin-top:14px" data-act="tend">🛑 Terminer le trajet</button></div>${decl}</div></div>${histH}`};
+V.champ=()=>{const st=compState();if(st==='idle')return`<div class="ph"><div><h1>Champion</h1></div></div><div class="glass card empty"><div class="big">🏆</div><b>Le championnat n'a pas encore commencé.</b><p>Restez connectés !</p></div>`;
+ const b=board('cycle'),w=b[0];if(!w||!w.amt)return`<div class="ph"><div><h1>Champion</h1></div></div><div class="glass card empty"><div class="big">🏆</div><b>Aucune recette validée pour le moment.</b></div>`;
+ const r=w.r,fin=st==='ended',fl=(l,v)=>`<div class="fld" style="text-align:left"><label>${l}</label><div class="val">${esc(v)}</div></div>`;
+ return`<div class="ph"><div><h1>Champion</h1><p>${fin?'Le vainqueur du cycle est proclamé.':'Leader provisoire : le champion sera proclamé à la fin du cycle.'}</p></div></div>
+ <div class="glass champ"><span class="badge b-gold">${fin?'🏆 CHAMPION DU CYCLE':'👑 LEADER PROVISOIRE'}</span><div class="cw"><span class="cr">👑</span><img src="${av(r)}" alt="Photo de ${esc(full(r))}"></div>
+ <h2>${esc(full(r))}</h2><p class="mut">${r.id} · ${esc(r.role)}</p><div class="amt">${money(w.amt)}</div><p class="mut">${w.n} courses validées · ${w.pax} passagers</p>
+ <div class="fl" style="margin-top:20px">${fl('Téléphone',r.phone)}${fl('E-mail',r.email)}${fl('Moto',r.moto)}${fl('Licence',r.licence)}${fl('Date de naissance',new Date(r.birth).toLocaleDateString('fr-FR'))}${fl('Adresse',r.addr)}</div></div>
+ <div class="grid g2">${b.slice(1,3).map(x=>`<div class="glass kpi"><div class="pl"><img src="${av(x.r)}" alt=""><div><b>${x.rk==2?'🥈':'🥉'} ${esc(full(x.r))}</b><small>${money(x.amt)}</small></div></div></div>`).join('')}</div>`};
+const lk=(l,v,extra='')=>`<div class="fld"><label>${l}<span class="lock" tabindex="0" data-tip="Pour modifier cette information, veuillez contacter un administrateur">🔒</span></label><div class="val">${esc(v)}</div>${extra}</div>`;
+V.prof=()=>{const r=me(),mine=board('cycle').find(x=>x.r.id===r.id),age=Math.floor((Date.now()-new Date(r.birth))/(365.25*DAY));
+ const sb=r.status==='Actif'?'b-em':r.status==='Banni'?'b-red':'b-amb';
+ const T={info:`<div class="sh"><h3>Informations personnelles</h3><span class="badge b-vio">🛡️ Géré par l'administration</span></div><div class="fl">${lk('Nom complet',full(r))}${lk('Adresse e-mail',r.email,`<button class="btn ghost sm" style="margin-top:8px" data-act="go" data-v="msg">Contacter le support</button>`)}${lk('Téléphone',r.phone)}${lk('Date de naissance / âge',new Date(r.birth).toLocaleDateString('fr-FR')+' · '+age+' ans')}${lk('Sexe',r.sex==='F'?'Féminin':'Masculin')}${lk('Adresse',r.addr)}</div>`,
+ game:`<div class="sh"><h3>Données de jeu</h3><span class="badge b-vio">🛡️ Géré par l'administration</span></div><div class="fl">${lk('ID joueur / matricule','#'+r.id)}${lk('Numéro de licence',r.licence)}${lk('Moto',r.moto)}${lk('Rôle / poste',r.role)}${lk('Statut du compte',r.status)}${lk("Date d'adhésion",new Date(r.joined).toLocaleDateString('fr-FR'))}${lk('Classement officiel',compState()==='idle'||!mine?'—':'#'+mine.rk+' sur '+board('cycle').length+' · '+money(mine.amt))}</div>`,
+ sec:`<div class="sh"><h3>Sécurité &amp; connexion</h3></div><div class="act" style="margin-bottom:14px"><button class="btn" data-act="pwd">🔑 Modifier le mot de passe</button><button class="btn ghost" data-act="mail">🆘 Mot de passe oublié ?</button></div><h3 style="font-size:15px">Connexions récentes</h3>${r.conns.slice(0,6).map(c=>`<div class="cn"><span>${dt(c.ts)} · ${esc(c.dev)}</span>${c.ok?'<span class="badge b-em">Réussie</span>':'<span class="badge b-red">Échec</span>'}</div>`).join('')}`,
+ pref:`<div class="sh"><h3>Préférences d'affichage</h3></div><div class="act" style="margin-bottom:16px"><button class="btn ghost" data-act="theme">${S.theme==='light'?'🌙 Passer en mode sombre':'☀️ Passer en mode clair'}</button></div><label>Courte biographie (140 caractères max.)</label><textarea id="bio" rows="3" maxlength="140" placeholder="Parlez-vous en une phrase…">${esc(r.bio)}</textarea><button class="btn" style="margin-top:10px" data-act="bio">Enregistrer la biographie</button>`};
+ return`<div class="banner"><div class="bd"><span class="badge ${sb}">${r.status}</span><span class="badge b-blue">${esc(r.role)}</span></div></div>
+ <div class="pg"><aside class="glass idc"><div class="avw"><img src="${av(r)}" alt="Ma photo"><button class="avedit" data-act="avatar" aria-label="Modifier la photo de profil">📷</button></div>
+ <h2 style="font-size:21px">${esc(full(r))}</h2><p class="mut">@${r.id}</p><p style="margin:8px 0"><span class="badge b-blue">${esc(r.role)}</span></p><p style="font-size:13px"><span class="dot"></span>En ligne</p>
+ ${r.bio?`<p class="mut" style="font-size:13px;margin-top:12px;font-style:italic">« ${esc(r.bio)} »</p>`:''}
+ <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:16px"><div class="fld"><label>Rang</label><div class="val hd">${mine&&compState()!=='idle'?'#'+mine.rk:'—'}</div></div><div class="fld"><label>Moto</label><div class="val" style="font-size:12.5px">${esc(r.moto)}</div></div></div></aside>
+ <section><div class="tabs">${[['info','Informations'],['game','Données de jeu'],['sec','Sécurité'],['pref','Préférences']].map(([k,l])=>`<button class="${PT===k?'on':''}" data-act="ptab" data-v="${k}">${l}</button>`).join('')}</div><div class="glass card">${T[PT]}</div></section></div>`};
+
+/* ---------- pages admin ---------- */
+const sumd=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+V.adash=()=>{const st=compState(),c=S.comp,t0=midnight(),td=S.rec.filter(x=>x.ts>=t0&&x.sync!==false);
+ const pend=td.filter(x=>x.st==='wait'),part=new Set(td.filter(x=>x.st!=='no').map(x=>x.rid)).size,val=sumd(board('cycle'),x=>x.amt);
+ const lab={idle:'▶ Lancer la compétition',live:'⏸ Mettre en pause',paused:'▶ Reprendre la compétition',ended:'🏁 Compétition terminée'}[st];
+ return`<div class="ph"><div><h1>Pilotage de la compétition</h1><p>Contrôlez la course, le cycle et la validation des recettes.</p></div></div>
+ <div class="glass card"><div class="sh"><h3>Contrôle de course</h3><span class="badge ${st==='live'?'b-em':st==='paused'?'b-amb':st==='ended'?'b-gold':'b-blue'}">${{idle:'Pas démarrée',live:'En cours',paused:'En pause',ended:'Terminée'}[st]}</span></div>
+ <div class="grid g2"><div><button class="btn ${st==='live'?'ghost':'em'} big" data-act="master" ${st==='ended'?'disabled':''}>${lab}</button>${st==='live'||st==='paused'?`<button class="btn red big" style="margin-top:10px" data-act="endc">🏆 Terminer &amp; proclamer le champion</button>`:''}</div>
+ <div><label>Durée totale du cycle</label><div class="pills" style="width:max-content">${[26,30].map(d=>`<button class="pill ${c.days===d?'on':''}" data-act="days" data-v="${d}" ${st==='ended'?'disabled':''}>${d} jours</button>`).join('')}</div>${c.startAt?`<p class="mut" style="font-size:13px;margin-top:8px">Début : ${dt(c.startAt)} · Fin prévue : ${dt(c.startAt+c.days*DAY)}</p>`:'<p class="mut" style="font-size:13px;margin-top:8px">Le classement reste masqué tant que la compétition n\'est pas lancée.</p>'}</div></div></div>
+ <div class="grid g4" style="margin-bottom:18px"><div class="glass kpi blue"><small>Motards inscrits</small><div class="v">${S.riders.length}</div><div class="s">${S.riders.filter(r=>r.status==='Actif').length} actifs</div></div>
+ <div class="glass kpi amb"><small>Recettes du jour en attente</small><div class="v">${money(sumd(pend,x=>x.amount))}</div><div class="s">${pend.length} saisie(s) à valider</div></div>
+ <div class="glass kpi em"><small>Taux de participation</small><div class="v">${(S.riders.length?Math.round(part/S.riders.length*100):0)}%</div><div class="s">${part} motard(s) ont roulé aujourd'hui</div></div>
+ <div class="glass kpi gold"><small>Recette validée (cycle)</small><div class="v">${money(val)}</div><div class="s">Cumul officiel</div></div></div>${S.riders.length?'':'<div class="note g">👋 Bienvenue. Pour commencer : ouvrez « Participants » pour ajouter vos motards, puis lancez la compétition ci-dessus.</div>'}${lbHTML(null)}`};
+V.valid=()=>{const w=S.rec.filter(x=>x.st==='wait'&&x.sync!==false).sort((a,b)=>b.ts-a.ts),dn=S.rec.filter(x=>x.st!=='wait').sort((a,b)=>(b.vat||b.ts)-(a.vat||a.ts)).slice(0,6);
+ return`<div class="ph"><div><h1>Centre de validation</h1><p>Un montant n'apparaît au classement qu'après votre validation.</p></div><span class="badge b-amb">${w.length} en attente</span></div>
+ <div class="glass card"><div class="tw"><table><thead><tr><th>Motard</th><th>Montant déclaré</th><th>Soumis à</th><th class="hm">Preuve</th><th>Actions</th></tr></thead><tbody>${w.length?w.map(x=>{const r=rd(x.rid);return`<tr><td><div class="pl"><img src="${av(r)}" alt=""><div><b>${esc(full(r))}</b><small>${r.id}</small></div></div></td><td class="num">${money(x.amount)}</td><td>${dt(x.ts)}</td><td class="hm"><small>📎 ${esc(x.proof)}</small>${chk(x)}</td><td><div class="act"><button class="btn sm em" data-act="ok" data-v="${x.id}">✔️ Valider</button><button class="btn sm ghost" data-act="fix" data-v="${x.id}">✏️ Corriger</button><button class="btn sm red" data-act="no" data-v="${x.id}">❌ Rejeter</button></div></td></tr>`}).join(''):'<tr><td colspan="5" style="text-align:center;padding:26px" class="mut">Aucune saisie en attente. Tout est à jour ✅</td></tr>'}</tbody></table></div></div>
+ <div class="glass card"><h3>Dernières décisions</h3>${dn.map(x=>`<div class="cn"><span>${esc(full(rd(x.rid)))} · ${money(x.amount)}${x.st==='ok'&&x.val!==x.amount?' → '+money(x.val):''}</span><span>${stB(x.st)} <button class="btn sm ghost" data-act="undo" data-v="${x.id}">↩️ Annuler</button></span></div>`).join('')}</div>`};
+let UQ='';
+V.users=()=>{const q=norm(UQ),L=S.riders.filter(r=>!q||norm(full(r)+' '+r.id+' '+(r.phone||'')).includes(q));
+ return`<div class="ph"><div><h1>Participants</h1><p>Ajoutez, modifiez, bannissez ou supprimez un motard (fraude, doublon…).</p></div><div class="act"><button class="btn ghost" data-act="csvr">⬇️ CSV</button><button class="btn" data-act="uadd">+ Ajouter un motard</button></div></div>
+ <div class="glass card"><input id="uq" data-in="uq" placeholder="🔎 Rechercher un motard (nom, matricule, téléphone)" value="${esc(UQ)}" style="margin-bottom:12px"><div class="tw"><table><thead><tr><th>Motard</th><th class="hm">Téléphone</th><th class="hm">Moto</th><th>Rôle</th><th>Statut</th><th>Validé</th><th>Actions</th></tr></thead><tbody>${L.length?L.map(r=>`<tr><td><div class="pl"><img src="${av(r)}" alt=""><div><b>${esc(full(r))}</b><small>${r.id}</small></div></div></td><td class="hm">${esc(r.phone)}</td><td class="hm">${esc(r.moto)}</td><td>${esc(r.role)}</td><td><span class="badge ${r.status==='Actif'?'b-em':r.status==='Banni'?'b-red':'b-amb'}">${r.status}</span></td><td class="num">${money(sumd(S.rec.filter(x=>x.rid===r.id&&x.st==='ok'),x=>x.val))}</td><td><div class="act"><button class="btn sm ghost" data-act="uedit" data-v="${r.id}">Modifier</button><button class="btn sm ${r.status==='Banni'?'em':'ghost'}" data-act="ustat" data-v="${r.id}">${r.status==='Banni'?'Réactiver':'🚫 Bannir'}</button><button class="btn sm red" data-act="udel" data-v="${r.id}">🗑️ Supprimer</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;padding:26px" class="mut">${S.riders.length?'Aucun résultat.':'Aucun participant. Cliquez sur « + Ajouter un motard ».'}</td></tr>`}</tbody></table></div></div>`};
+V.live=()=>{const d0=midnight(),fl=S.riders.map(r=>({r,st:fleetSt(r)})),cnt=k=>fl.filter(x=>x.st===k).length,LB={course:'En course',pause:'En pause',off:'Hors ligne'},BC={course:'b-em',pause:'b-amb',off:''};
+ let det='';
+ if(SEL){const r=rd(SEL),rows=S.rec.filter(x=>x.rid===SEL&&x.ts>=d0&&x.st!=='no'&&x.sync!==false),km=sumd(rows,x=>x.km||0),dec=sumd(rows,x=>x.amount),ratio=dec/Math.max(km,.1);
+  const v=!rows.length?['','Aucun trajet aujourd\'hui.']:km<.5&&dec>0?['w','⚠️ Recette déclarée sans déplacement GPS suffisant : à vérifier.']:ratio>1500?['w','⚠️ Recette élevée pour la distance parcourue : à vérifier.']:['','✅ Recette cohérente avec les déplacements GPS.'];
+  det=`<div class="glass card"><div class="sh"><h3>Historique du jour · ${esc(full(r))} (${r.id})</h3><button class="btn ghost sm" data-act="fleet" data-v="">Voir toute la flotte</button></div><div class="grid g4" style="margin-bottom:12px"><div class="glass kpi"><small>Distance GPS</small><div class="v">${km.toFixed(1)} km</div></div><div class="glass kpi"><small>Recette déclarée</small><div class="v">${money(dec)}</div></div><div class="glass kpi"><small>Recette par km</small><div class="v">${rows.length?money(ratio):'—'}</div></div></div><div class="note ${v[0]}">${v[1]}</div>${rows.length?`<div class="tw"><table><thead><tr><th>#</th><th>Heure</th><th>Passagers</th><th>Distance</th><th>Montant</th><th>Tracé</th></tr></thead><tbody>${rows.map(x=>`<tr><td>#${x.id}</td><td>${tm(x.ts)}</td><td>${x.pax}</td><td>${x.km==null?'—':x.km+' km'}</td><td class="num">${money(x.amount)}</td><td><small>${trackOf(x).length} points · ${(x.dr||[]).length||'—'} dépôt(s)</small></td></tr>`).join('')}</tbody></table></div>`:''}</div>`}
+ return`<div class="ph"><div><h1>Radar GPS en temps réel</h1><p>Suivez la flotte, puis cliquez sur un motard pour croiser ses déplacements avec sa recette.</p></div><div class="act"><span class="badge b-em">🟢 En course ${cnt('course')}</span><span class="badge b-amb">🟠 En pause ${cnt('pause')}</span><span class="badge">⚫ Hors ligne ${cnt('off')}</span></div></div>
+ <div class="tg" style="grid-template-columns:1.5fr 1fr"><div class="glass card"><h3>📡 ${SEL?'Trajets du jour · '+esc(full(rd(SEL))):'Flotte sur le terrain'}</h3><canvas id="map" class="map" style="height:380px"></canvas><p class="mut" style="font-size:12.5px;margin-top:8px">Les positions affichées proviennent des trajets lancés sur cet appareil. Pour suivre toute la flotte à distance, une synchronisation par serveur est nécessaire.</p></div>
+ <div class="glass card" style="max-height:470px;overflow:auto"><h3>Motards</h3>${fl.map(x=>`<button class="ci ${SEL===x.r.id?'on':''}" data-act="fleet" data-v="${x.r.id}"><img src="${av(x.r)}" alt="" loading="lazy" decoding="async"><div><b>${esc(full(x.r))}</b><small>${x.r.id} · ${esc(x.r.moto)}</small></div><span class="badge ${BC[x.st]}">${LB[x.st]}</span></button>`).join('')}</div></div>${det}
+ <div class="glass card"><h3>Derniers trajets</h3><div class="tw"><table><thead><tr><th>#</th><th>Conducteur</th><th>Date</th><th>Passagers</th><th>Distance</th><th>Montant</th><th>Statut</th></tr></thead><tbody>${S.rec.filter(x=>x.sync!==false).sort((a,b)=>b.ts-a.ts).slice(0,10).map(x=>`<tr><td>#${x.id}</td><td>${esc(full(rd(x.rid)))}</td><td>${dt(x.ts)}</td><td>${x.pax}</td><td>${x.km==null?'—':x.km+' km'}</td><td class="num">${money(x.amount)}</td><td>${stB(x.st)}</td></tr>`).join('')}</tbody></table></div></div>`};
+V.audit=()=>`<div class="ph"><div><h1>Journal d'audit &amp; sécurité</h1><p>Traçabilité des validations, modifications de profils et connexions suspectes.</p></div></div><div class="glass card">${S.log.map(l=>`<div class="cn"><span>${l.flag?'⚠️ ':''}<b>${esc(l.who)}</b> · ${esc(l.act)}</span><small>${dt(l.ts)}</small></div>`).join('')}</div>`;
+V.aset=()=>`<div class="ph"><div><h1>Réglages &amp; données</h1><p>Compte administrateur, zones, sauvegardes et remise à zéro.</p></div></div>
+<div class="note w">ℹ️ Les données sont enregistrées dans <b>ce navigateur</b>. Faites une sauvegarde régulière. Pour partager les données entre plusieurs téléphones, un serveur est nécessaire.</div>
+<div class="grid g2"><div class="glass card"><h3>🛡️ Compte administrateur</h3><p class="mut" style="font-size:13px;margin-bottom:10px">Identifiant : <b>${esc(S.admin.id)}</b><br>Téléphone : ${esc(S.admin.phone||'—')}<br>E-mail : ${esc(S.admin.email||'—')}</p><div class="act"><button class="btn ghost" data-act="aprof">Modifier mes coordonnées</button><button class="btn" data-act="apwd">🔑 Changer le mot de passe</button></div></div>
+<div class="glass card"><h3>📞 Règles de contact</h3><button class="btn ghost" data-act="peer">Appels entre participants : ${S.set.peerCalls?'autorisés':'interdits'}</button></div></div>
+<div class="glass card"><div class="sh"><h3>🔥 Zones à forte demande</h3><button class="btn sm" data-act="zadd">+ Ajouter une zone</button></div>${S.zones.length?S.zones.map(z=>`<div class="cn"><span><b>${esc(z.n)}</b> · ${z.d} · <small>${z.la.toFixed(5)}, ${z.lo.toFixed(5)}</small></span><button class="btn sm red" data-act="zdel" data-v="${esc(z.k)}">Supprimer</button></div>`).join(''):'<p class="mut">Aucune zone. Ajoutez-en pour guider les motards.</p>'}</div>
+<div class="glass card"><h3>💾 Sauvegarde &amp; exports</h3><div class="act"><button class="btn" data-act="bkp">⬇️ Sauvegarde complète (JSON)</button><label class="btn ghost" style="margin:0;cursor:pointer;color:var(--txt)">⬆️ Restaurer une sauvegarde<input id="rst" type="file" accept="application/json,.json" hidden></label></div><div class="act" style="margin-top:10px"><button class="btn ghost" data-act="csvr">Participants (CSV)</button><button class="btn ghost" data-act="csvrec">Recettes (CSV)</button><button class="btn ghost" data-act="csvlb">Classement (CSV)</button></div><p class="mut" style="font-size:12px;margin-top:8px">Les notes vocales ne sont pas incluses dans la sauvegarde.</p></div>
+<div class="glass card" style="border-color:rgba(255,84,112,.5)"><h3>⚠️ Zone sensible</h3><div class="act"><button class="btn ghost" data-act="resetcomp">Remettre la compétition avant le coup d'envoi</button><button class="btn ghost" data-act="clearrec">Effacer trajets, recettes et messages</button><button class="btn red" data-act="wipe">🗑️ Tout effacer (retour à zéro)</button></div><p class="mut" style="font-size:12.5px;margin-top:10px">« Tout effacer » supprime participants, recettes, messages, zones et le compte administrateur : l'écran de première configuration réapparaît.</p></div>`;
+/* ---------- réseau / hors-ligne ---------- */
+const online=()=>(S.sess&&S.sess.role==='admin')||(!S.offline&&navigator.onLine!==false);
+const vid=()=>S.sess.role==='admin'?'admin':S.sess.id;
+const queueN=()=>S.msgs.filter(m=>m.st==='pending').length+S.rec.filter(x=>x.sync===false).length;
+const saveL=()=>{clearTimeout(dT);dT=setTimeout(save,700)};let dT;
+function snapshot(){if(!online()||!S.comp.startAt)return;const o={at:Date.now()};['day','week','cycle'].forEach(p=>o[p]=calc(p).map(x=>({id:x.r.id,amt:x.amt,n:x.n,pax:x.pax,rk:x.rk,gap:x.gap})));S.snap=o}
+function flush(){let n=0;S.msgs.forEach(m=>{if(m.st==='pending'){m.st='sent';n++;setTimeout(()=>{m.st='deliv';save();render()},900)}});S.rec.forEach(x=>{if(x.sync===false){x.sync=true;n++}});save();render();if(n)toast(`✅ Synchronisation terminée : ${n} élément(s) envoyé(s).`)}
+function ext(s){const now=Date.now(),H=36e5;
+ s.set||={peerCalls:false};s.ast||={on:false,voice:true,every:120};s.drafts||={};s.calls||=[];s.offline??=false;s.snap??=null;s.zones||=[];s.lock||={};s.msgs||=[];s.nextMsg||=1;s.log||=[];return s}
+/* ---------- présence & canaux ---------- */
+const pres=id=>id==='admin'?'on':(S.trip&&S.trip.rid===id)?'road':(Date.now()-(rd(id).seen||0)<12e4?'on':'off');
+const presL=p=>p==='road'?'Sur la route':p==='on'?'En ligne':'Hors ligne';
+const dotH=p=>`<span class="pd ${p==='off'?'off':''}"></span>`;
+const peerName=p=>p==='admin'?'Support administration':full(rd(p));
+let CH=null,MT='chat',LIM=20;const RS={};const RATES=[1,1.5,2];
+const chMsgs=ch=>S.msgs.filter(m=>m.ch===ch&&(m.st!=='pending'||m.from===vid()));
+const unread=ch=>chMsgs(ch).filter(m=>m.from!==vid()&&!(m.rb||[]).includes(vid())).length;
+const lastTs=ch=>{const m=chMsgs(ch);return m.length?m[m.length-1].ts:0};
+const pv=ch=>{const m=chMsgs(ch).slice(-1)[0];return m?(m.type==='audio'?'🎤 Note vocale':m.text.slice(0,36)):'Aucun message'};
+function chs(){const adm=S.sess.role==='admin',o=[{id:'ann',t:'📢 Annonces officielles',ico:'📢'},{id:'grp',t:'👥 Groupe motards',ico:'👥'}];
+ if(adm)S.riders.slice().sort((a,b)=>lastTs('dm:'+b.id)-lastTs('dm:'+a.id)).forEach(r=>o.push({id:'dm:'+r.id,t:full(r),r}));else o.push({id:'dm:'+S.sess.id,t:'🛟 Support administration',ico:'🛟',peer:'admin'});return o}
+const totalUnread=()=>S.sess?chs().reduce((a,c)=>a+unread(c.id),0):0;
+function markRead(ch){let c=false;chMsgs(ch).forEach(m=>{if(m.from!==vid()&&!(m.rb||[]).includes(vid())){(m.rb=m.rb||[]).push(vid());c=true}});if(c)save()}
+function post(ch,m,blob){m.id=S.nextMsg++;m.ch=ch;m.from=vid();m.ts=Date.now();m.rb=[];m.react={};m.st=online()?'sent':'pending';S.msgs.push(m);if(blob)idbPut(m.id,blob);
+ if(m.st==='sent')setTimeout(()=>{m.st='deliv';save();if(PAGE==='msg')render()},900);
+ save();render();if(m.st==='pending')toast('🕓 Hors-ligne : message enregistré, envoi automatique au retour du réseau.')}
+const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+const auHTML=m=>{const a=m.aud;return`<div class="au"><button class="pb" data-act="aplay" data-v="${m.id}" aria-label="Lire la note vocale">▶</button><div class="wf" id="wf${m.id}">${a.bars.map(h=>`<i style="height:${Math.round(Math.max(.12,h)*100)}%"></i>`).join('')}</div><small>${mmss(a.dur)}</small><button class="spd" data-act="aspd" data-v="${m.id}">x${RS[m.id]||1}</button></div>`};
+function bub(m){const mine=m.from===vid(),adm=m.from==='admin',rbn=(m.rb||[]).filter(x=>x!==m.from).length;
+ const tick=!mine?'':m.st==='pending'?'<span class="tk">🕓</span>':`<span class="tk ${rbn?'rd':''}">${m.st==='sent'?'✓':'✓✓'}</span>`;
+ const rx=m.ch==='ann'?`<div class="rxs">${['👍','👏'].map(e=>{const l=(m.react&&m.react[e])||[];return`<button class="rx ${l.includes(vid())?'on':''}" data-act="react" data-v="${m.id}" data-e="${e}">${e} ${l.length||''}</button>`}).join('')}</div>`:'';
+ return`<div class="bb ${mine?'me':''}">${!mine?`<small class="who">${adm?'🛡️ Administration':esc(full(rd(m.from)))}</small>`:''}<div class="bt">${m.type==='audio'?auHTML(m):`<span>${esc(m.text)}</span>`}</div>${rx}<small class="mt">${tm(m.ts)} ${tick}${m.st==='pending'?' · En attente de synchronisation':''}${mine&&(m.ch==='ann'||m.ch==='grp')&&rbn?' · Lu par '+rbn:''}</small></div>`}
+function conv(){const c=chs().find(x=>x.id===CH);markRead(CH);const all=chMsgs(CH),sh=all.slice(-LIM),adm=S.sess.role==='admin',canPost=CH!=='ann'||adm,peer=c.peer||(c.r&&c.r.id);
+ const head=`<div class="ch"><button class="btn ghost sm bk" data-act="cback" aria-label="Retour">←</button>${c.r?`<img src="${av(c.r)}" alt="" loading="lazy" decoding="async">`:`<span class="ico">${c.ico}</span>`}<div><b>${esc(c.t)}</b><br><small>${c.r?dotH(pres(c.r.id))+presL(pres(c.r.id)):CH==='ann'?'Canal officiel · lecture seule pour les motards':c.peer?dotH('on')+'En ligne':'Échanges entre motards'}</small></div>${peer?`<button class="btn ghost sm" style="margin-left:auto" data-act="call" data-v="${peer}">📞 Appeler</button>`:''}</div>`;
+ const list=`<div class="ml" id="ml">${all.length>sh.length?'<button class="btn ghost sm" data-act="more" style="align-self:center">Charger les messages précédents</button>':''}${sh.map(bub).join('')||'<p class="mut" style="text-align:center;margin:auto">Aucun message. Écrivez le premier !</p>'}</div>`;
+ const foot=!canPost?`<div class="note" style="margin:10px">🔒 Canal officiel : seule l'administration publie. Réagissez avec 👍 ou 👏.</div>`:REC?`<div class="cmp rec"><span class="pulse" style="width:12px;height:12px;border-radius:50%;background:var(--red)"></span><b>Enregistrement</b><b id="rt">0:00</b><span class="lvl" style="flex:1"><i id="lv"></i></span><button class="btn ghost sm" data-act="mcancel">✕</button><button class="btn sm" data-act="mstop">Envoyer ➤</button></div>`:`<div class="cmp"><input id="mi" placeholder="${online()?'Écrire un message…':'Hors-ligne : envoi au retour du réseau'}" value="${esc(S.drafts[CH]||'')}" data-in="draft" autocomplete="off"><button class="btn ghost" data-act="mic" aria-label="Enregistrer une note vocale">🎙️</button><button class="btn" data-act="msend">Envoyer</button></div>`;
+ return head+list+foot}
+V.msg=()=>{let body;
+ if(MT==='calls')body=callsH();
+ else{const list=chs();if(!CH&&innerWidth>880)CH=list[0].id;if(CH&&!list.some(c=>c.id===CH))CH=null;
+  body=`<div class="hub ${CH?'open':''}"><div class="cl glass">${list.map(c=>{const n=unread(c.id);return`<button class="ci ${CH===c.id?'on':''}" data-act="ch" data-v="${c.id}">${c.r?`<img src="${av(c.r)}" alt="" loading="lazy" decoding="async">`:`<span class="ico">${c.ico}</span>`}<div><b>${esc(c.t)}</b><small>${esc(pv(c.id))}</small></div>${c.r?dotH(pres(c.r.id)):''}${n?`<em>${n}</em>`:''}</button>`}).join('')}</div><div class="cv glass">${CH?conv():'<div class="empty"><div class="big">💬</div><b>Choisissez une discussion</b></div>'}</div></div>`}
+ const tu=totalUnread();
+ return`<div class="ph"><div><h1>Messages &amp; support</h1><p>Chat interne, notes vocales et appels.</p></div></div><div class="tabs"><button class="${MT==='chat'?'on':''}" data-act="mtab" data-v="chat">💬 Discussions${tu?' ('+tu+')':''}</button><button class="${MT==='calls'?'on':''}" data-act="mtab" data-v="calls">📞 Appels</button></div>`+body};
+/* ---------- appels (simulés) ---------- */
+function callsH(){const adm=S.sess.role==='admin';
+ const ct=adm?S.riders.map(r=>({id:r.id,n:full(r),r,tel:r.phone})):[{id:'admin',n:'Support administration',tel:S.admin&&S.admin.phone}].concat(S.set.peerCalls?S.riders.filter(r=>r.id!==S.sess.id&&r.status!=='Banni').map(r=>({id:r.id,n:full(r),r,tel:r.phone})):[]);
+ return`<div class="glass card" style="max-width:640px"><h3>📞 Joindre par téléphone</h3><p class="mut" style="font-size:13px;margin-bottom:10px">Le bouton ouvre l'application Téléphone de votre appareil.</p>${ct.length?ct.map(c=>`<div class="cn"><span style="display:flex;align-items:center;gap:9px">${c.r?`<img src="${av(c.r)}" class="mini" alt="" loading="lazy">`:'<span class="ico">🛟</span>'}<span><b>${esc(c.n)}</b><br><small>${esc(c.tel||'Numéro non renseigné')}</small></span></span>${c.tel?`<a class="btn sm em" href="tel:${esc(String(c.tel).replace(/[^+\\d]/g,''))}">📞 Appeler</a>`:''}</div>`).join(''):'<p class="mut">Aucun contact.</p>'}</div>`}
+let CALL=null,RT=null,AC=null;
+function ringTone(on){clearInterval(RT);if(!on)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const b=()=>{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=440;g.gain.value=.04;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+.35)};b();RT=setInterval(b,1500)}catch(e){}}
+function startCall(p,dir){if(CALL){toast('Un appel est déjà en cours.');return}
+ if(dir==='out'&&!online()){toast('Appel impossible hors connexion.');return}
+ if(dir==='out'&&S.sess.role==='rider'&&p!=='admin'&&!S.set.peerCalls){toast("Les appels entre participants ne sont pas autorisés.");return}
+ CALL={p,dir,st:dir==='in'?'ring':'dial',t0:Date.now(),mute:false,spk:false};ringTone(true);
+ if(dir==='out')CALL.to=setTimeout(()=>{if(!CALL)return;if(pres(p)==='off')endCall();else{CALL.st='live';CALL.t0=Date.now();ringTone(false);render()}},2500);render()}
+function endCall(){if(!CALL)return;const c=CALL,live=c.st==='live';clearTimeout(c.to);ringTone(false);CALL=null;
+ S.calls.unshift({id:S.nextCall++,from:c.dir==='out'?vid():c.p,to:c.dir==='out'?c.p:vid(),ts:c.t0,dur:live?Math.round((Date.now()-c.t0)/1e3):0,res:live?'ok':'missed'});save();render()}
+function callBar(){const cb=$('#callbar');if(!CALL){cb.hidden=true;cb.innerHTML='';return}const c=CALL;cb.hidden=false;
+ cb.innerHTML=`<span class="pulse" style="width:12px;height:12px;border-radius:50%;background:#fff"></span><b>${esc(peerName(c.p))}</b><span style="opacity:.85">${c.st==='live'?'Appel audio':c.st==='ring'?'Appel entrant…':'Appel en cours…'}</span><b class="hd" id="ct">${c.st==='live'?mmss(Math.round((Date.now()-c.t0)/1e3)):''}</b><span style="flex:1"></span>${c.st==='ring'?`<button class="btn sm em" data-act="cans">Répondre</button><button class="btn sm red" data-act="cend">Refuser</button>`:`<button class="btn sm ghost" data-act="cmute">${c.mute?'🔇 Micro coupé':'🎤 Micro actif'}</button><button class="btn sm ghost" data-act="cspk">${c.spk?'🔊 Haut-parleur':'🔈 Écouteur'}</button><button class="btn sm red" data-act="cend">🔴 Raccrocher</button>`}`}
+/* ---------- notes vocales ---------- */
+const IDB=new Promise(res=>{try{const q=indexedDB.open('g5audio',1);q.onupgradeneeded=()=>q.result.createObjectStore('a');q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)}catch(e){res(null)}});
+async function idbPut(k,b){const d=await IDB;if(!d)return;try{d.transaction('a','readwrite').objectStore('a').put(b,k)}catch(e){}}
+function idbGet(k){return IDB.then(d=>d?new Promise(r=>{try{const q=d.transaction('a').objectStore('a').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)}catch(e){r(null)}}):null)}
+function idbDel(k){return IDB.then(d=>{if(d)try{d.transaction('a','readwrite').objectStore('a').delete(k)}catch(e){}})}
+function idbClear(){return IDB.then(d=>{if(d)try{d.transaction('a','readwrite').objectStore('a').clear()}catch(e){}})}
+let REC=null,PL=null;
+/* ---------- voix : micro, écoute, synthèse ---------- */
+const framed=(()=>{try{return window.self!==window.top}catch(e){return true}})();
+const micMsg=e=>{const n=e&&e.name;if(window.isSecureContext===false)return "Le micro exige une adresse sécurisée (https://). Hébergez la page en HTTPS.";
+ if(n==='NotAllowedError'||n==='SecurityError')return (framed?"L'aperçu intégré bloque le micro : ouvrez la page dans son propre onglet. ":"")+"Pour débloquer : touchez le cadenas à gauche de l'adresse, puis Autorisations (ou Paramètres du site), Micro, Autoriser, et rechargez la page. Sur Android : Réglages, Applis, Chrome, Autorisations, Micro.";
+ return n==='NotFoundError'?"Aucun micro détecté sur cet appareil.":n==='NotReadableError'?"Le micro est utilisé par une autre application : fermez-la puis réessayez.":"Micro indisponible ("+(n||'erreur')+")."};
+const srMsg=err=>({'not-allowed':micMsg({name:'NotAllowedError'}),'service-not-allowed':micMsg({name:'NotAllowedError'}),'audio-capture':micMsg({name:'NotFoundError'}),'network':"La reconnaissance vocale de Chrome a besoin du réseau. Sans méga, utilisez le clavier ou la dictée native du téléphone.",'language-not-supported':"Le français n'est pas disponible pour la dictée sur cet appareil."})[err]||null;
+let SR_=null,LISTEN_OK=false,VOICE=null,UNL=false;
+function stt(onText,onEnd){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R)return false;const r=new R();r.lang='fr-FR';r.interimResults=true;r.continuous=false;
+ r.onresult=e=>{let s='';for(const x of e.results)s+=x[0].transcript;onText(s,e.results[e.results.length-1].isFinal)};r.onerror=ev=>onEnd&&onEnd(ev.error||'error');r.onend=()=>onEnd&&onEnd();
+ try{r.start();SR_=r;LISTEN_OK=true;return true}catch(e){return false}}
+function pickVoice(){try{const v=speechSynthesis.getVoices();VOICE=v.find(x=>/^fr[-_]FR/i.test(x.lang))||v.find(x=>/^fr/i.test(x.lang))||null}catch(e){}}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function unlock(){if(UNL||!window.speechSynthesis)return;UNL=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(e){}}
+function pauseListen(){if(SR_&&AS.listening){try{SR_.stop()}catch(e){}}}
+function resumeListen(){if(AS.hands&&AS.open&&!AS.listening&&!AS.speaking)setTimeout(()=>{if(AS.hands&&!AS.listening&&!AS.speaking)listenStart()},400)}
+function speak(t,cb){const done=()=>{AS.speaking=false;cb&&cb();resumeListen();renderAst()};
+ if(!S.ast.voice||!window.speechSynthesis){cb&&cb();resumeListen();return}
+ try{const u=new SpeechSynthesisUtterance(String(t).replace(/ FC/g,' francs congolais'));u.lang='fr-FR';if(VOICE)u.voice=VOICE;u.volume=1;u.rate=1;
+  u.onstart=()=>{AS.speaking=true;pauseListen();renderAst()};u.onend=done;u.onerror=ev=>{if(ev&&(ev.error==='canceled'||ev.error==='interrupted'))return;done()};
+  speechSynthesis.cancel();speechSynthesis.resume();setTimeout(()=>speechSynthesis.speak(u),80)}catch(e){done()}}
+function listenStart(){if(AS.listening)return;
+ if(!(window.SpeechRecognition||window.webkitSpeechRecognition)){AS.hands=false;say("Ce navigateur ne propose pas la reconnaissance vocale (utilisez Chrome, Edge ou un Safari récent). Écrivez votre commande.");return}
+ const ok=stt((s,fin)=>{AS.interim=fin?'':s;if(fin){AS.interim='';handle(s)}else renderAst()},err=>{AS.listening=false;AS.interim='';
+  if(err){const m=srMsg(err);if(m){AS.hands=false;say(m)}else renderAst();return}
+  renderAst();if(AS.hands&&!AS.speaking)setTimeout(()=>{if(AS.hands&&!AS.listening&&!AS.speaking)listenStart()},350)});
+ if(ok){AS.listening=true;renderAst()}else{AS.hands=false;say("Impossible de démarrer l'écoute. Écrivez votre commande.")}}
+let REQ=false;
+async function recStart(){if(REQ||REC)return;
+ if(!window.MediaRecorder||!navigator.mediaDevices){toast(window.isSecureContext===false?micMsg({}):"Enregistrement audio non pris en charge par ce navigateur.");return}
+ if(AS.listening){AS.hands=false;try{SR_&&SR_.stop()}catch(e){}}
+ REQ=true;toast('Autorisez le micro si le navigateur le demande…');let st;
+ try{st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){REQ=false;toast(micMsg(e));return}
+ REQ=false;const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t)),r={t0:Date.now(),bars:[],chunks:[],stream:st};
+ try{try{r.mr=new MediaRecorder(st,mt?{mimeType:mt}:undefined)}catch(e0){r.mr=new MediaRecorder(st)}}catch(e){st.getTracks().forEach(t=>t.stop());toast('Enregistrement audio impossible : '+(e.name||'erreur'));return}
+ r.mr.ondataavailable=e=>e.data&&e.data.size&&r.chunks.push(e.data);r.mr.start(250);
+ try{const c=new (window.AudioContext||window.webkitAudioContext)(),an=c.createAnalyser();an.fftSize=256;c.createMediaStreamSource(st).connect(an);r.ctx=c;const b=new Uint8Array(an.frequencyBinCount);
+  r.iv=setInterval(()=>{an.getByteTimeDomainData(b);let m=0;b.forEach(v=>m=Math.max(m,Math.abs(v-128)));r.bars.push(m/128);const e=$('#lv');if(e)e.style.width=Math.min(100,m/128*260)+'%'},120)}catch(e){}
+ REC=r;render()}
+function recStop(send){const r=REC;if(!r)return;REC=null;clearInterval(r.iv);const dur=Math.max(1,Math.round((Date.now()-r.t0)/1e3));
+ const fin=url=>{if(!send)return;if(!url){toast("Aucun son capté : vérifiez le micro et réessayez.");return}
+  const n=32,src=r.bars.length?r.bars:Array.from({length:n},()=>.5),mx=Math.max(...src,.05);
+  const bars=Array.from({length:n},(_,i)=>{const a=Math.floor(i*src.length/n),sl=src.slice(a,Math.max(a+1,Math.floor((i+1)*src.length/n)));return Math.round(Math.max(.12,Math.max(...sl)/mx)*100)/100});
+  post(CH,{type:'audio',aud:{idb:1,dur,bars}},url)};
+ const clean=()=>{r.stream.getTracks().forEach(t=>t.stop());try{r.ctx&&r.ctx.close()}catch(e){}};
+ if(r.mr.state!=='inactive'){r.mr.onstop=()=>{clean();if(!send||!r.chunks.length)return fin(null);fin(new Blob(r.chunks,{type:r.mr.mimeType||'audio/webm'}))};r.mr.stop()}else{clean();fin(null)}render()}
+function plProg(p){if(!PL)return;const w=$('#wf'+PL.id);if(!w)return;const k=Math.round(Math.min(1,p)*w.children.length);[...w.children].forEach((b,i)=>b.classList.toggle('on',i<k))}
+function syncPl(){document.querySelectorAll('.pb').forEach(b=>b.textContent=PL&&+b.dataset.v===PL.id?'⏸':'▶')}
+function plStop(){if(PL){clearInterval(PL.iv);if(PL.el)PL.el.pause();const id=PL.id;PL=null;const w=$('#wf'+id);w&&[...w.children].forEach(b=>b.classList.remove('on'))}syncPl()}
+/* ---------- saisie & assistant vocal ---------- */
+const NW={zero:0,un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,sept:7,huit:8,neuf:9,dix:10,onze:11,douze:12,treize:13,quatorze:14,quinze:15,seize:16,vingt:20,trente:30,quarante:40,cinquante:50,soixante:60,cent:100,cents:100,mille:1000};
+const norm=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’‘`]/g,"'");
+function digitize(t){t=t.replace(/(\d)[\s.\u202f\u00a0](?=\d{3}\b)/g,'$1');
+ const tk=t.split(/\s+/).flatMap(w=>w.includes('-')&&w.split('-').every(p=>p in NW)?w.split('-'):[w]),out=[];let i=0;
+ while(i<tk.length){if(tk[i] in NW){let tot=0,cur=0,prev='',j=i;
+   while(j<tk.length&&(tk[j] in NW||(tk[j]==='et'&&tk[j+1] in NW))){const x=tk[j];if(x==='et'){j++;continue}
+    if(x==='cent'||x==='cents')cur=(cur||1)*100;else if(x==='mille'){tot+=(cur||1)*1000;cur=0}else if(x==='vingt'&&prev==='quatre')cur=cur-4+80;else cur+=NW[x];prev=x;j++}
+   out.push(String(tot+cur));i=j}else out.push(tk[i++])}
+ return out.join(' ')}
+const cap=s=>s.replace(/(^|[\s-])([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+function parseDecl(raw){const t=digitize(norm(raw||'')),o={rev:0,courses:0,fuel:0,zones:[]},re=/(\d+)\s*(?:francs?|fc)\b/g,am=[];let m;
+ while(m=re.exec(t))am.push({v:+m[1],i:m.index,e:m.index+m[0].length});
+ am.forEach((a,k)=>{const b=t.slice(k?am[k-1].e:0,a.i).slice(-45),f=t.slice(a.e,k+1<am.length?am[k+1].i:undefined).split(/[,.;]/)[0].slice(0,30),fu=/(carburant|essence|depense|coute|plein|gasoil)/;
+  const type=fu.test(b)?'f':/(recette|chiffre|affaires|total|gagne|encaisse)/.test(b)?'r':fu.test(f)?'f':'r';type==='f'?o.fuel+=a.v:o.rev=Math.max(o.rev,a.v)});
+ const c=/(\d+)\s*(?:courses?|trajets?|clients?|passagers?)/.exec(t);if(c)o.courses=+c[1];
+ const z=/\b(avenue|av|boulevard|bd|route|rue|quartier|marche|gare|commune)\.?\s+([a-z0-9][a-z0-9'-]*(?:\s+[a-z0-9'-]+)*?)(?=\s+(?:et|puis|ou|le|la|les|mon|ma|mes|j'ai|j|car|avec|apres|pour|a|de|du|ensuite|donc)\b|[,.;!]|$)/g;
+ while(m=z.exec(t))o.zones.push(cap(m[1]+' '+m[2]));return o}
+let DECL={rev:0,courses:0,fuel:0,zones:[]};
+function fillDecl(){const s=(i,v)=>{const e=$('#'+i);if(e)e.value=v};s('dr',DECL.rev||'');s('dc',DECL.courses||'');s('df',DECL.fuel||'');s('dz',DECL.zones.join(', '))}
+function declModal(txt){DECL=parseDecl(txt);modal(`<h3>🎙️ Saisie vocale de la journée<button class="btn ghost sm" data-act="close">✕</button></h3><p class="mut" style="font-size:13px;margin-bottom:10px">Dictez ou écrivez votre journée : les champs se remplissent seuls. Vérifiez, puis validez.</p><button class="btn em big" data-act="dmic" id="dmic">🎙️ Appuyer pour dicter</button><textarea id="dtx" rows="3" style="margin-top:10px" data-in="dtx" placeholder="Ex : Aujourd'hui j'ai fait 12 courses, chiffre d'affaires 45 000 francs, carburant 5000 francs, avenue Kasa-Vubu.">${esc(txt||'')}</textarea><div class="f2" style="margin-top:12px"><div><label>💰 Recette (FC)</label><input id="dr" type="number" min="0"></div><div><label>🛵 Courses</label><input id="dc" type="number" min="0"></div><div><label>⛽ Carburant (FC)</label><input id="df" type="number" min="0"></div><div><label>📍 Zones / itinéraires</label><input id="dz"></div></div><p class="mut" style="font-size:12px;margin-top:8px">Analyse locale par règles : fonctionne sans méga.</p><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="dsave">Valider et envoyer</button></div>`);fillDecl()}
+const AS={open:false,log:[],interim:'',listening:false,dl:false,hands:false,speaking:false};let PEND=null,ASTT=0;
+function say(t){AS.log.push({w:'bot',t});AS.log=AS.log.slice(-30);speak(t);renderAst();return t}
+function handle(raw){AS.log.push({w:'me',t:raw});const r=route(raw);if(r)say(r);else renderAst()}
+function takePax(n,a){const t=S.trip,L=t.pts[t.pts.length-1];t.groups.push({id:t.gid++,n,amt:a,at:Date.now(),la:L&&L.la,lo:L&&L.lo,drop:0});S.lastAmt=a;save();render()}
+function dropGroup(g){const t=S.trip,L=t.pts[t.pts.length-1];g.drop=Date.now();if(L){g.dla=L.la;g.dlo=L.lo}save();render()}
+const ds=(a,n)=>{if(a.length<=n)return a;const s=a.length/n;return Array.from({length:n},(_,i)=>a[Math.floor(i*s)]).concat([a[a.length-1]])};
+function doEnd(){const t=S.trip,L=t.pts[t.pts.length-1];t.groups.forEach(g=>{if(!g.drop){g.drop=Date.now();if(L){g.dla=L.la;g.dlo=L.lo}}});
+ const tot=sumd(t.groups,g=>g.n*g.amt),pax=sumd(t.groups,g=>g.n),on=online();stopGps();S.trip=null;
+ if(tot>0){S.rec.push({id:S.nextRec++,rid:t.rid,amount:tot,pax,km:+t.km.toFixed(1),ts:Date.now(),st:'wait',val:0,vat:0,sync:on,pts:ds(t.pts,60),dr:t.groups.filter(g=>g.dla).map(g=>({la:g.dla,lo:g.dlo,n:g.n})),proof:`Trajet GPS · ${t.km.toFixed(1)} km · ${pax} pers.`});log(`Trajet terminé : ${money(tot)} soumis à validation`)}
+ save();closeM();render();
+ const msg=tot>0?(on?'Trajet terminé. Recette envoyée pour validation.':'🕓 Trajet enregistré hors-ligne : envoi automatique au retour du réseau.'):'Trajet terminé sans recette.';toast(msg);return `${msg} Total : ${money(tot)}.`}
+function routeRider(t,raw){const nm=/(\d+)\s*(?:personnes?|clients?|passagers?)/.exec(t),am=/(\d+)\s*(?:francs?|fc)\b/.exec(t)||/\b(?:a|pour)\s+(\d+)\b/.exec(t),tr=S.trip;
+ if(/(courses?|trajets?)/.test(t)&&/(chiffre|recette|total|gagne)/.test(t)&&am&&!/prend|ajout|embarqu/.test(t)){declModal(raw);return "J'ai pré-rempli votre déclaration. Vérifiez puis validez."}
+ if(/(prendre|prends|prend|ajoute|ajouter|embarque|monte)/.test(t)){if(!tr)return "Démarrez d'abord un trajet : dites « démarrer le trajet ».";if(!am)return "Combien par personne ? Dites par exemple : prendre 2 personnes à 2000 francs.";const n=nm?+nm[1]:1,a=+am[1];takePax(n,a);return `${n} personne(s) à bord à ${money(a)} chacune. Total ${money(n*a)}.`}
+ if(/(deposer|depose|descendre|descend)/.test(t)){if(!tr)return "Aucun trajet en cours.";const ab=tr.groups.filter(g=>!g.drop);if(!ab.length)return "Personne n'est à bord.";const all=/tous|tout/.test(t),l=all?ab:[ab[0]];l.forEach(dropGroup);return `Déposé : +${money(sumd(l,g=>g.n*g.amt))}.`}
+ if(/(terminer|termine|cloturer|fin du trajet|arreter)/.test(t)){if(!tr)return "Aucun trajet en cours.";const tot=sumd(tr.groups,g=>g.n*g.amt);PEND=()=>doEnd();return `Récapitulatif : ${sumd(tr.groups,g=>g.n)} passagers, ${money(tot)}, ${tr.km.toFixed(1)} kilomètres. Voulez-vous terminer le trajet ? Dites oui ou non.`}
+ if(/(demarrer|demarre|commencer|lancer|nouveau).*(trajet|course)|nouveau trajet/.test(t)){if(tr)return "Un trajet est déjà en cours.";A.tstart();return "Trajet démarré. Bonne route !"}
+ if(/(aller|va |guide|navigu|destination|itineraire)/.test(t)){if(!tr||!tr.pts.length)return "Démarrez un trajet et attendez le signal GPS.";const z=S.zones.find(z=>t.includes(z.k));if(z){setDest(z);return `Itinéraire vers ${z.n} lancé.`}return "Dites par exemple : aller à la gare routière."}
+ if(/(classement|position|rang|place)/.test(t)){if(compState()==='idle')return "Le championnat n'a pas encore commencé.";const b=board('cycle'),m=b.find(x=>x.r.id===S.sess.id);return m?`Vous êtes ${m.rk}${m.rk==1?'er':'e'} sur ${b.length} avec ${money(m.amt)} validés.`:"Je ne trouve pas votre position."}
+ if(/(ecart|premier|leader|retard|rattraper)/.test(t)){if(compState()==='idle')return "Le championnat n'a pas encore commencé.";const b=board('cycle'),m=b.find(x=>x.r.id===S.sess.id);if(!m)return "Position introuvable.";return m.rk==1?`Vous êtes leader, avec ${money(b[1]?m.amt-b[1].amt:0)} d'avance.`:`Il vous manque ${money(b[0].amt-m.amt)} pour rattraper ${full(b[0].r)}, le premier.`}
+ if(/(aujourd|jour|combien|recette|argent|gagne)/.test(t)){const d0=midnight(),k=S.rec.filter(x=>x.rid===S.sess.id&&x.ts>=d0&&x.st!=='no'),cur=tr?sumd(tr.groups.filter(g=>g.drop),g=>g.n*g.amt):0;return `Aujourd'hui : ${money(sumd(k,x=>x.amount)+cur)} déclarés, dont ${money(sumd(k.filter(x=>x.st==='ok'),x=>x.val))} déjà validés.`}
+ return null}
+function routeAdmin(t){const d0=midnight(),td=S.rec.filter(x=>x.ts>=d0&&x.st!=='no'),w=S.rec.filter(x=>x.st==='wait'&&x.sync!==false),fl=S.riders.map(fleetSt);
+ const on=`${fl.filter(x=>x!=='off').length} motard(s) en ligne, dont ${fl.filter(x=>x==='course').length} en course.`;
+ if(/(en ligne|connecte|actifs)/.test(t))return on;
+ if(/heure/.test(t)&&/(chiffre|recette|affaires)/.test(t)){const h=S.rec.filter(x=>x.ts>=Date.now()-36e5&&x.st!=='no');return `Sur la dernière heure : ${money(sumd(h,x=>x.amount))} déclarés pour ${h.length} saisie(s).`}
+ if(/(attente|valider|validation)/.test(t))return `${w.length} recette(s) en attente, pour ${money(sumd(w,x=>x.amount))}.`;
+ if(/(premier|leader|tete|classement)/.test(t)){if(compState()==='idle')return "La compétition n'est pas lancée.";const b=board('cycle')[0];return b&&b.amt?`${full(b.r)} mène avec ${money(b.amt)}.`:"Aucune recette validée pour l'instant."}
+ if(/(resume|bilan|journee)/.test(t)){const b=compState()==='idle'?null:board('cycle')[0];return `Résumé du jour : ${money(sumd(td,x=>x.amount))} déclarés, dont ${money(sumd(td.filter(x=>x.st==='ok'),x=>x.val))} validés. ${w.length} en attente. ${on}${b&&b.amt?' Leader : '+full(b.r)+'.':''}`}
+ if(/(chiffre|total|recette|affaires)/.test(t))return `Recette validée du cycle : ${money(sumd(board('cycle'),x=>x.amt))}. Aujourd'hui : ${money(sumd(td.filter(x=>x.st==='ok'),x=>x.val))} validés.`;
+ return null}
+function route(raw){const t=digitize(norm(raw));
+ if(PEND){const f=PEND;PEND=null;return /\b(oui|ok|d'accord|confirme|vas y)\b/.test(t)?f():"D'accord, j'annule."}
+ return (S.sess.role==='admin'?routeAdmin:routeRider)(t,raw)||"Je n'ai pas compris. "+(S.sess.role==='admin'?"Essayez : « combien de motards sont en ligne ? » ou « résumé de la journée ».":"Essayez : « prendre 2 personnes à 2000 francs », « déposer le client » ou « quel est mon classement ? ».")}
+function renderAst(){const p=$('#ast'),f=$('#fab');if(!S||!S.sess){p.hidden=true;f.hidden=true;return}f.hidden=false;p.hidden=!AS.open;if(!AS.open)return;
+ const old=$('#ai'),v=old?old.value:'',foc=old&&document.activeElement===old,adm=S.sess.role==='admin',on=AS.listening||AS.hands;
+ const chips=adm?['Combien de motards sont en ligne ?','Résumé de la journée','Chiffre d\'affaires de cette heure','Recettes en attente','Qui est premier ?']:['Prendre deux personnes à 2000 francs','Déposer le client','Terminer le trajet','Quel est mon classement ?','Quel est l\'écart avec le premier ?','Combien j\'ai fait aujourd\'hui ?','Aujourd\'hui j\'ai fait 12 courses, chiffre d\'affaires 45 000 francs, carburant 5000 francs, avenue Kasa-Vubu'];
+ p.innerHTML=`<div class="ah"><b class="hd">🎙️ Assistant G5</b><span style="flex:1"></span><button class="btn ghost sm" data-act="avoice" aria-label="Voix">${S.ast.voice?'🔊':'🔇'}</button><button class="btn ghost sm" data-act="aclose" aria-label="Fermer">✕</button></div>${framed?`<div class="note w" style="margin:0;font-size:12px;flex-direction:column;align-items:flex-start"><span>⚠️ Aperçu intégré : le micro et la voix sont bloqués ici.</span>${/^https?:/.test(location.href)?`<a class="btn sm em" href="${esc(location.href)}" target="_blank" rel="noopener">↗ Ouvrir en plein onglet (micro actif)</a><input readonly value="${esc(location.href)}" onclick="this.select()" aria-label="Adresse de la page">`:'<span>Ouvrez le lien de la page (Partager, puis copier le lien) dans Chrome.</span>'}</div>`:''}<div class="stat">${AS.speaking?'🔊 L\'assistant parle…':AS.listening?'🎙️ Je vous écoute…':AS.hands?'🎙️ Mains libres activé':'Appuyez sur 🎙️ pour parler'}</div><div class="al" id="al">${AS.log.length?AS.log.map(l=>`<div class="ab ${l.w}">${esc(l.t)}</div>`).join(''):'<p class="mut" style="font-size:13px">Dites ou écrivez une commande. Exemples ci-dessous.</p>'}${AS.interim?`<div class="ab me live">${esc(AS.interim)}…</div>`:''}</div><div class="chips">${chips.map(c=>`<button class="chip" data-act="achip" data-v="${esc(c)}">${esc(c.length>34?c.slice(0,32)+'…':c)}</button>`).join('')}</div><div class="cmp" style="padding:8px 0 0;border:0"><input id="ai" placeholder="Parlez ou écrivez…" autocomplete="off"><button class="btn ${on?'red':'em'}" data-act="alisten" aria-label="${on?'Arrêter l\'écoute':'Parler'}">${on?'⏹':'🎙️'}</button><button class="btn" data-act="asend" aria-label="Envoyer">➤</button></div><div class="act"><button class="btn ghost sm" data-act="vtest">🔊 Tester la voix</button><button class="btn ghost sm" data-act="mtest">🔓 Autoriser / tester le micro</button></div><label class="chk"><input type="checkbox" data-in="apro" ${S.ast.on?'checked':''}> Proactif toutes les <select data-in="aev">${[30,60,120].map(n=>`<option ${S.ast.every===n?'selected':''}>${n}</option>`).join('')}</select> s</label><small class="mut">Analyse locale par règles. L'IA avancée (Whisper / LLM) exige un serveur : non active dans cette version.</small>`;
+ const n=$('#ai');n.value=v;if(foc)n.focus();const al=$('#al');al.scrollTop=al.scrollHeight}
+function proTick(){if(!S||!S.sess||!S.ast.on)return;ASTT++;if(ASTT<S.ast.every)return;ASTT=0;let m;
+ if(S.sess.role==='admin'){const p=S.rec.filter(x=>x.st==='wait'&&x.sync!==false).length;if(!p)return;m=`${p} recette(s) attendent votre validation.`}
+ else{const t=S.trip;m=!t?"Prêt à rouler ? Dites : démarrer le trajet.":t.groups.some(g=>!g.drop)?`Vous avez ${sumd(t.groups.filter(g=>!g.drop),g=>g.n)} personne(s) à bord. Dites : déposer le client, à l'arrivée.`:"Avez-vous pris un client ? Dites-moi le montant et le nombre de personnes."}
+ if(S.sess.role==='rider'&&LISTEN_OK&&AS.open)AS.hands=true;say(m);if(!AS.open)toast('🎙️ '+m)}
+const chk=x=>{if(x.km==null)return'';const r=x.amount/Math.max(x.km,.1);return x.km<.5?'<br><small style="color:var(--red)">⚠️ GPS : '+x.km+' km seulement</small>':r>1500?'<br><small style="color:var(--amb)">⚠️ Recette élevée pour '+x.km+' km</small>':''};
+/* ---------- rendu général ---------- */
+const RN=[['dash','🏁','Tableau de bord'],['trip','🏍️','Mon trajet'],['msg','💬','Messages'],['champ','🏆','Champion'],['prof','👤','Mon profil']];
+const AN=[['adash','🎛️','Pilotage'],['valid','✔️','Validation'],['msg','💬','Messages'],['users','👥','Participants'],['live','📡','En direct'],['audit','🛡️','Audit'],['aset','⚙️','Réglages']];
+function render(){
+ if(S.sess&&S.sess.role==='rider'){const r0=me();if(!r0||r0.status==='Banni'){S.sess=null;stopGps();S.trip=null;save();setTimeout(()=>toast("Ce compte a été supprimé ou suspendu par l'administration."),50)}}
+ const a=!!S.sess,on=online(),q=queueN(),rider=a&&S.sess.role==='rider';
+ $('#login').hidden=a;$('#app').hidden=!a;
+ $('#demo').innerHTML=`${rider&&(!on||q)?`<span class="badge b-amb">${on?'':'📴 Hors-ligne · '}${q?'🕓 '+q+' en attente de synchronisation':'enregistrement local'}</span>`:''}<button class="tbtn" data-act="theme" aria-label="Changer de thème">${S.theme==='light'?'🌙 Sombre':'☀️ Clair'}</button>`;
+ callBar();
+ if(on&&a)snapshot();
+ if(!a){const first=!S.admin;$('#sf').hidden=!first;$('#lf').hidden=first;$('#sg').hidden=first;$('#lsub').textContent=first?'Première utilisation : créez le compte administrateur.':'Connectez-vous pour accéder à votre espace.';$('#l1').textContent=LR==='admin'?'Identifiant administrateur':'Identifiant motard';renderAst();return}
+ const adm=S.sess.role==='admin',nav=adm?AN:RN;if(!nav.some(n=>n[0]===PAGE))PAGE=nav[0][0];
+ const fa=document.activeElement,fid=fa&&fa.id==='mi'?'mi':null,fv=fid?fa.value:'',fs=fid?fa.selectionStart:0;
+ const vh=V[PAGE](),pend=S.rec.filter(x=>x.st==='wait'&&x.sync!==false).length,un=totalUnread();
+ $('#nav').innerHTML=`<div class="brand"><b>G5</b><div><strong>${adm?'Supervision':'Espace motard'}</strong></div></div>`+nav.map(n=>{const bd=n[0]==='valid'?pend:n[0]==='msg'?un:0;return`<button class="ni ${PAGE===n[0]?'on':''}" data-act="go" data-v="${n[0]}"><i>${n[1]}</i><span>${n[2]}</span>${bd?`<em>${bd}</em>`:''}</button>`}).join('')+`<button class="ni out" data-act="logout"><i>🚪</i><span>Quitter</span></button>`;
+ $('#view').innerHTML=vh;
+ if(fid&&$('#mi')){const i=$('#mi');i.value=fv;i.focus();try{i.setSelectionRange(fs,fs)}catch(e){}}
+ if(PAGE==='trip'&&S.trip)liveTrip();if(PAGE==='live')liveAdmin();
+ if(PAGE==='msg'){const ml=$('#ml');if(ml)ml.scrollTop=ml.scrollHeight}
+ if(PL)syncPl();renderAst()}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),Math.max(3400,m.length*55))}
+function modal(h){const m=$('#modal');m.innerHTML=`<div class="mbox glass" role="dialog" aria-modal="true">${h}</div>`;m.hidden=false}
+const closeM=()=>{$('#modal').hidden=true;UPH=null};
+function ask(msg,fn){CB=fn;modal(`<h3>Confirmation</h3><p>${msg}</p><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="cb">Confirmer</button></div>`)}
+
+/* ---------- carte & GPS ---------- */
+const RAD=Math.PI/180,SCOL={course:'#2ee6a6',pause:'#ffa84d',off:'#6b7280'};
+const off=(o,dx,dy)=>({la:o.la+dy/111320,lo:o.lo+dx/(111320*Math.cos(o.la*RAD))});
+const dist=(a,b)=>{const x=(b.lo-a.lo)*RAD*Math.cos((a.la+b.la)/2*RAD),y=(b.la-a.la)*RAD;return Math.sqrt(x*x+y*y)*6371e3};
+const brg=(a,b)=>(Math.atan2((b.lo-a.lo)*Math.cos(a.la*RAD),b.la-a.la)/RAD+360)%360;
+const zonesXY=()=>S.zones;
+function turnOf(n){const d=(brg(n.corner,n.dest)-brg(n.start,n.corner)+360)%360;return d>45&&d<135?'droite':d>225&&d<315?'gauche':null}
+function setDest(z){const t=S.trip,L=t.pts[t.pts.length-1],d={la:z.la,lo:z.lo};t.nav={z:z.n,start:{la:L.la,lo:L.lo},dest:d,corner:{la:d.la,lo:L.lo},stage:1,said:{}};t.nav.turn=turnOf(t.nav);t.nav.d=dist(L,t.nav.corner);save();speak(`Itinéraire vers ${z.n}. Continuez tout droit sur ${Math.round(t.nav.d/10)*10} mètres.`);render()}
+function guide(){const t=S.trip;if(!t||!t.nav)return;const n=t.nav,P=t.pts[t.pts.length-1],tg=n.stage===1?n.corner:n.dest,d=dist(P,tg);n.d=d;
+ if(n.stage===1){if(d<18){n.stage=2;n.said={};speak(n.turn?`Tournez à ${n.turn}.`:'Continuez tout droit.')}else if(d<=110&&n.turn&&!n.said.a){n.said.a=1;speak(`Tournez à ${n.turn} dans ${Math.round(d/10)*10} mètres`)}}
+ else if(d<22){speak(`Vous êtes arrivé à ${n.z}.`);toast('📍 Vous êtes arrivé à '+n.z);t.nav=null}
+ else if(d<=120&&!n.said.b){n.said.b=1;speak(`Destination dans ${Math.round(d/10)*10} mètres`)}}
+function trackOf(x){return x.pts||[]}
+function drawMap(cv,tracks,o={}){
+ if(!cv)return;const d=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;const g=cv.getContext('2d');g.scale(d,d);
+ const bg=g.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#0a1126');bg.addColorStop(1,'#10122b');g.fillStyle=bg;g.fillRect(0,0,w,h);
+ const all=tracks.flatMap(t=>t.pts).concat(o.route||[]);if(!all.length){g.fillStyle='#8b93b5';g.font='14px sans-serif';g.textAlign='center';g.fillText(o.empty||'Recherche du signal GPS…',w/2,h/2);return}
+ const la=all.map(p=>p.la),lo=all.map(p=>p.lo),la0=(Math.min(...la)+Math.max(...la))/2,lo0=(Math.min(...lo)+Math.max(...lo))/2,kx=Math.cos(la0*RAD);
+ const span=Math.max((Math.max(...lo)-Math.min(...lo))*kx,Math.max(...la)-Math.min(...la),.0025),sc=(Math.min(w,h)-90)/span,P=p=>[w/2+(p.lo-lo0)*kx*sc,h/2-(p.la-la0)*sc];
+ g.strokeStyle='rgba(120,150,255,.09)';g.lineWidth=1;const ox=(w/2-lo0*kx*sc)%44,oy=(h/2+la0*sc)%44;
+ for(let x=ox;x<w;x+=44){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}for(let y=oy;y<h;y+=44){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}
+ (o.zones||[]).forEach(z=>{const[x,y]=P(z);if(x<-40||y<-40||x>w+40||y>h+40)return;const rr=Math.max(16,90/111320*sc),rg=g.createRadialGradient(x,y,0,x,y,rr);rg.addColorStop(0,z.d==='forte'?'rgba(255,84,112,.55)':z.d==='moyenne'?'rgba(255,168,77,.45)':'rgba(79,140,255,.35)');rg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=rg;g.beginPath();g.arc(x,y,rr,0,7);g.fill();g.fillStyle='#cbd2f5';g.font='11px sans-serif';g.textAlign='center';g.fillText(z.n,x,y+rr*.7+10)});
+ if(o.route&&o.route.length>1){g.setLineDash([8,7]);g.strokeStyle='#7aa7ff';g.lineWidth=3;g.beginPath();o.route.forEach((p,i)=>{const[x,y]=P(p);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke();g.setLineDash([]);const[x,y]=P(o.route[o.route.length-1]);g.font='20px sans-serif';g.textAlign='center';g.fillText('📍',x,y)}
+ tracks.forEach(t=>{if(!t.pts.length)return;g.strokeStyle=t.color;g.lineWidth=4;g.lineCap=g.lineJoin='round';g.shadowColor=t.color;g.shadowBlur=10;g.beginPath();t.pts.forEach((p,i)=>{const[x,y]=P(p);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke();g.shadowBlur=0;
+  const[sx,sy]=P(t.pts[0]);g.strokeStyle=t.color;g.lineWidth=2;g.beginPath();g.arc(sx,sy,4,0,7);g.stroke();
+  const[x,y]=P(t.pts[t.pts.length-1]);g.fillStyle=t.color+'44';g.beginPath();g.arc(x,y,15,0,7);g.fill();g.fillStyle=t.color;g.beginPath();g.arc(x,y,7,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=2;g.stroke();
+  g.fillStyle='#fff';g.font='600 12px sans-serif';g.textAlign='left';g.fillText(t.label,x+13,y-11)})}
+let watch=null,simT=null,hd=1,gpsErr='';
+function addPt(la,lo){const t=S.trip;if(!t)return;const L=t.pts[t.pts.length-1],now=Date.now();
+ if(L){const dm=dist(L,{la,lo});if(dm<3)return;t.km+=dm/1e3;t.spd=dm/Math.max((now-L.t)/1e3,.5)*3.6}else t.o={la,lo};
+ t.pts.push({la,lo,t:now});if(t.pts.length>400)t.pts.shift();guide();saveL();liveTrip()}
+function gpsLabel(){const e=$('#gl');if(e)e.textContent=gpsErr?'📡 '+gpsErr:S.trip&&S.trip.pts.length?'📡 GPS actif':'📡 Recherche du signal GPS…'}
+function gpsFail(m){gpsErr=m;gpsLabel()}
+function stopGps(){if(watch!=null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(simT);simT=null}
+function startGps(){stopGps();if(!navigator.geolocation){gpsFail('GPS indisponible sur cet appareil');return}gpsErr='';watch=navigator.geolocation.watchPosition(p=>{if(p.coords.accuracy>150)return;gpsErr='';addPt(p.coords.latitude,p.coords.longitude)},er=>gpsFail(er.code===1?'Localisation refusée : autorisez-la dans le navigateur':'Signal GPS introuvable'),{enableHighAccuracy:true,maximumAge:1e3,timeout:2e4})}
+function liveTrip(){const t=S.trip;if(!t||PAGE!=='trip'||!$('#map'))return;$('#tmr').textContent=hms(Date.now()-t.start);$('#kms').textContent=t.km.toFixed(2)+' km';$('#spd').textContent=Math.round(t.spd||0)+' km/h';gpsLabel();
+ const nv=$('#nv');if(nv){if(t.nav){const n=t.nav,d=Math.round((n.d??dist(t.pts[t.pts.length-1]||n.start,n.stage===1?n.corner:n.dest))/10)*10;let ic='⬆️',tx=`Continuez tout droit · ${d} m`;
+  if(n.stage===1&&n.turn&&d<=150){ic=n.turn==='droite'?'↱':'↰';tx=`Tournez à ${n.turn} dans ${d} m`}else if(n.stage===2)tx=`Continuez · ${n.z} dans ${d} m`;
+  nv.hidden=false;nv.innerHTML=`<span class="ic">${ic}</span><div><b>${tx}</b><small>Vers ${esc(n.z)} · guidage vocal actif</small></div><button class="btn ghost sm" data-act="ndest" aria-label="Annuler l'itinéraire">✕</button>`}else nv.hidden=true}
+ drawMap($('#map'),[{pts:t.pts,color:'#2ee6a6',label:'Vous'}],{route:t.nav?[t.nav.start,t.nav.corner,t.nav.dest]:null,zones:zonesXY()})}
+const SIMS=[];
+const stepSim=s=>{const L=s.pts[s.pts.length-1];s.h+=(Math.random()-.5)*.7;s.pts.push({la:L.la+Math.cos(s.h)*.00022,lo:L.lo+Math.sin(s.h)*.00022});if(s.pts.length>80)s.pts.shift()};
+SIMS.forEach(s=>{for(let k=0;k<25;k++)stepSim(s)});
+let SEL=null;
+function fleetSt(r){if(r.status==='Banni')return'off';if(S.trip&&S.trip.rid===r.id)return'course';return pres(r.id)==='on'?'pause':'off'}
+function liveAdmin(){if(PAGE!=='live'||!$('#map'))return;const tr=[],pal=['#4f8cff','#b79bff','#ffc83d','#2ee6a6'];
+ if(SEL){const d0=midnight();S.rec.filter(x=>x.rid===SEL&&x.ts>=d0&&x.st!=='no'&&x.sync!==false).forEach((x,i)=>tr.push({pts:trackOf(x),color:pal[i%4],label:'Trajet #'+x.id}));const s=SIMS.find(x=>x.n===SEL);if(s)tr.push({pts:s.pts,color:SCOL[s.st],label:SEL+' · direct'});if(S.trip&&S.trip.rid===SEL)tr.push({pts:S.trip.pts,color:SCOL.course,label:SEL+' (réel)'})}
+ else{SIMS.forEach(s=>tr.push({pts:s.pts,color:SCOL[s.st],label:s.n}));if(S.trip)tr.push({pts:S.trip.pts,color:SCOL.course,label:S.trip.rid+' (réel)'})}
+ drawMap($('#map'),tr,{empty:'Aucun trajet à afficher pour le moment.'})}
+let tickN=0;
+setInterval(()=>{tickN++;
+ if(PAGE==='live'&&tickN%2==0){SIMS.forEach(s=>s.st==='course'&&stepSim(s));liveAdmin()}
+ if(S&&S.trip)liveTrip();
+ if(CALL&&CALL.st==='live'){const c=$('#ct');if(c)c.textContent=mmss(Math.round((Date.now()-CALL.t0)/1e3))}
+ if(REC){const r=$('#rt'),s=Math.round((Date.now()-REC.t0)/1e3);if(r)r.textContent=mmss(s);if(s>=90)A.mstop()}
+ if(S&&S.sess&&S.sess.role==='rider'&&tickN%20==0){const r0=me();if(r0){r0.seen=Date.now();saveL()}}
+ proTick()},1000);
+addEventListener('resize',()=>{liveTrip();liveAdmin()});
+
+/* ---------- actions ---------- */
+const val=id=>$('#'+id).value;
+const A={
+ go:e=>{PAGE=e.dataset.v;render();scrollTo(0,0)},
+ per:e=>{PER=e.dataset.v;render()},
+ ltab:e=>{LR=e.dataset.v;document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b===e));$('#le').textContent='';render()},
+ logout:()=>{stopGps();S.sess=null;save();render()},
+ resetcomp:()=>ask('Revenir avant le coup d\'envoi ? Le classement sera masqué jusqu\'au prochain lancement.',()=>{S.comp={startAt:null,days:S.comp.days,frozen:null,paused:false,ended:false};log('Compétition remise avant le coup d\'envoi');save();closeM();render()}),
+
+ undo:e=>{const x=S.rec.find(r=>r.id==e.dataset.v);x.st='wait';x.val=0;x.vat=0;log(`Décision annulée pour la recette #${x.id} de ${x.rid}`);save();render();toast('Remise en attente de validation.')},
+ ustat:e=>{const r=rd(e.dataset.v),ban=r.status!=='Banni';ask(ban?`Bannir ${esc(full(r))} ? Il ne pourra plus se connecter et sortira du classement. Ses données sont conservées.`:`Réactiver ${esc(full(r))} ?`,()=>{r.status=ban?'Banni':'Actif';log(`${ban?'Bannissement':'Réactivation'} de ${r.id}`,ban);if(ban&&S.trip&&S.trip.rid===r.id){stopGps();S.trip=null}save();closeM();render()})},
+ udel:e=>{const r=rd(e.dataset.v),n=S.rec.filter(x=>x.rid===r.id).length;modal(`<h3>Supprimer définitivement<button class="btn ghost sm" data-act="close">✕</button></h3><div class="note w">⚠️ Irréversible : le compte de <b>${esc(full(r))}</b> (${esc(r.id)}), ses ${n} recette(s) et ses messages seront effacés et le classement recalculé. Une trace est conservée dans le journal d'audit.</div><label>Motif (fraude, doublon…)</label><input id="dm_r" placeholder="Ex : recette falsifiée"><label style="margin-top:10px">Tapez le matricule <b>${esc(r.id)}</b> pour confirmer</label><input id="dm_c" autocomplete="off"><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn red" data-act="udelok" data-v="${esc(r.id)}">🗑️ Supprimer</button></div>`)},
+ udelok:e=>{const id=e.dataset.v,r=rd(id);if(val('dm_c').trim().toUpperCase()!==id.toUpperCase()){toast('Matricule incorrect : suppression annulée.');return}const why=val('dm_r').trim()||'non précisé',tot=sumd(S.rec.filter(x=>x.rid===id&&x.st==='ok'),x=>x.val);
+  S.msgs.filter(m=>m.type==='audio'&&(m.ch==='dm:'+id||m.from===id)).forEach(m=>idbDel(m.id));S.msgs=S.msgs.filter(m=>m.ch!=='dm:'+id&&m.from!==id);S.rec=S.rec.filter(x=>x.rid!==id);S.riders=S.riders.filter(x=>x.id!==id);
+  if(S.trip&&S.trip.rid===id){stopGps();S.trip=null}if(SEL===id)SEL=null;if(CH==='dm:'+id)CH=null;log(`Participant SUPPRIMÉ : ${full(r)} (${id}) · motif : ${why} · recettes validées effacées : ${money(tot)}`,1);save();closeM();render();toast('Participant supprimé.')},
+ aprof:()=>modal(`<h3>Mes coordonnées<button class="btn ghost sm" data-act="close">✕</button></h3><div class="fg"><label>Téléphone</label><input id="ap_t" value="${esc(S.admin.phone)}"></div><div class="fg"><label>E-mail</label><input id="ap_m" value="${esc(S.admin.email)}"></div><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="aprofsave">Enregistrer</button></div>`),
+ aprofsave:()=>{S.admin.phone=val('ap_t').trim();S.admin.email=val('ap_m').trim();log('Coordonnées administrateur modifiées');save();closeM();render()},
+ apwd:()=>modal(`<h3>Changer le mot de passe<button class="btn ghost sm" data-act="close">✕</button></h3><div class="fg"><label>Mot de passe actuel</label><input id="a0" type="password"></div><div class="fg"><label>Nouveau (8 caractères min.)</label><input id="a1" type="password"></div><div class="fg"><label>Confirmer</label><input id="a2" type="password"></div><div class="err" id="ae"></div><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="apwdsave">Enregistrer</button></div>`),
+ apwdsave:async()=>{const e=m=>$('#ae').textContent=m;if(await H(val('a0'))!==S.admin.ph)return e('Mot de passe actuel incorrect.');if(val('a1').length<8)return e('Nouveau mot de passe trop court (8 caractères min.).');if(val('a1')!==val('a2'))return e('Les deux mots de passe ne correspondent pas.');S.admin.ph=await H(val('a1'));log('Mot de passe administrateur modifié');save();closeM();toast('Mot de passe mis à jour.')},
+ zadd:()=>modal(`<h3>Ajouter une zone<button class="btn ghost sm" data-act="close">✕</button></h3><div class="fg"><label>Nom du lieu</label><input id="zn"></div><div class="fg"><label>Niveau de demande</label><select id="zd"><option>forte</option><option>moyenne</option><option>faible</option></select></div><div class="f2"><div><label>Latitude</label><input id="zla" type="number" step="any"></div><div><label>Longitude</label><input id="zlo" type="number" step="any"></div></div><button class="btn ghost sm" style="margin-top:10px" data-act="zpos">📍 Utiliser ma position actuelle</button><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="zsave">Ajouter</button></div>`),
+ zpos:()=>{if(!navigator.geolocation){toast('GPS indisponible.');return}navigator.geolocation.getCurrentPosition(p=>{$('#zla').value=p.coords.latitude.toFixed(6);$('#zlo').value=p.coords.longitude.toFixed(6)},()=>toast('Position refusée ou introuvable.'),{enableHighAccuracy:true,timeout:15e3})},
+ zsave:()=>{const n=val('zn').trim(),la=parseFloat(val('zla')),lo=parseFloat(val('zlo'));if(!n||!isFinite(la)||!isFinite(lo)||Math.abs(la)>90||Math.abs(lo)>180){toast('Nom, latitude et longitude valides requis.');return}const k=norm(n);if(S.zones.some(z=>z.k===k)){toast('Cette zone existe déjà.');return}S.zones.push({k,n,d:val('zd'),la,lo});log(`Zone ajoutée : ${n}`);save();closeM();render()},
+ zdel:e=>{S.zones=S.zones.filter(z=>z.k!==e.dataset.v);save();render()},
+ bkp:()=>{const d=JSON.parse(JSON.stringify(S));d.sess=null;d.trip=null;d.snap=null;dl(`g5-sauvegarde-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(d),'application/json');toast('Sauvegarde téléchargée.')},
+ csvr:()=>{dl('g5-participants.csv',csv([['Matricule','Nom','Prénom','Rôle','Statut','Téléphone','E-mail','Moto','Licence','Recette validée (FC)']].concat(S.riders.map(r=>[r.id,r.name,r.first,r.role,r.status,r.phone,r.email,r.moto,r.licence,sumd(S.rec.filter(x=>x.rid===r.id&&x.st==='ok'),x=>x.val)]))),'text/csv')},
+ csvrec:()=>{dl('g5-recettes.csv',csv([['N°','Matricule','Date','Passagers','Km','Déclaré (FC)','Validé (FC)','Statut']].concat(S.rec.map(x=>[x.id,x.rid,new Date(x.ts).toLocaleString('fr-FR'),x.pax,x.km==null?'':x.km,x.amount,x.val,x.st==='ok'?'Validée':x.st==='no'?'Rejetée':'En attente']))),'text/csv')},
+ csvlb:()=>{dl('g5-classement.csv',csv([['Rang','Matricule','Nom','Recette validée (FC)','Courses','Passagers']].concat(calc('cycle').map(x=>[x.rk,x.r.id,full(x.r),x.amt,x.n,x.pax]))),'text/csv')},
+ wipe:()=>modal(`<h3>Tout effacer<button class="btn ghost sm" data-act="close">✕</button></h3><div class="note w">⚠️ Participants, recettes, messages, zones et compte administrateur seront supprimés de cet appareil. Faites d'abord une sauvegarde.</div><label>Tapez <b>EFFACER</b> pour confirmer</label><input id="wc" autocomplete="off"><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn red" data-act="wipeok">🗑️ Tout effacer</button></div>`),
+ wipeok:async()=>{if(val('wc').trim().toUpperCase()!=='EFFACER'){toast('Confirmation incorrecte.');return}stopGps();try{localStorage.removeItem(KEY)}catch(e){}await idbClear();const th=S.theme;S=ext(seed());S.theme=th;PAGE=null;CH=null;SEL=null;UQ='';save();closeM();render();toast('Toutes les données ont été effacées.')},
+ clearrec:()=>ask('Effacer tous les trajets, recettes, messages et remettre la compétition avant le coup d\'envoi ? Les participants sont conservés.',()=>{stopGps();S.trip=null;S.rec=[];S.nextRec=1;S.msgs=[];S.nextMsg=1;S.calls=[];S.comp={startAt:null,days:S.comp.days,frozen:null,paused:false,ended:false};idbClear();log('Trajets, recettes et messages effacés',1);save();closeM();render();toast('Données de course effacées.')}),
+ close:closeM,cb:()=>{const f=CB;CB=null;f&&f()},
+ master:()=>{const st=compState(),c=S.comp;if(st==='idle'){c.startAt=Date.now();c.frozen=null;c.paused=false;c.ended=false;log(`Compétition lancée (cycle de ${c.days} jours)`);toast('🏁 Compétition lancée !')}else if(st==='live'){c.paused=true;c.frozen=Date.now();log('Compétition mise en pause');toast('Compétition en pause.')}else if(st==='paused'){c.paused=false;c.frozen=null;log('Compétition reprise');toast('Compétition reprise.')}save();render()},
+ days:e=>{S.comp.days=+e.dataset.v;log(`Durée du cycle fixée à ${e.dataset.v} jours`);save();render()},
+ endc:()=>ask('Terminer le cycle et proclamer le champion ? Le classement sera figé définitivement.',()=>{S.comp.ended=true;S.comp.frozen=Date.now();S.comp.paused=false;log('Cycle terminé, champion proclamé');save();closeM();render();toast('🏆 Champion proclamé.')}),
+ ok:e=>{const x=S.rec.find(r=>r.id==e.dataset.v);x.st='ok';x.val=x.amount;x.vat=Date.now();log(`Recette de ${x.rid} validée (${money(x.val)})`);save();render();toast('Recette validée et publiée au classement.')},
+ no:e=>{const x=S.rec.find(r=>r.id==e.dataset.v);x.st='no';x.val=0;log(`Recette de ${x.rid} rejetée (${money(x.amount)})`);save();render();toast('Recette rejetée.')},
+ fix:e=>{const x=S.rec.find(r=>r.id==e.dataset.v);modal(`<h3>Corriger le montant</h3><p class="mut" style="margin-bottom:12px">${esc(full(rd(x.rid)))} a déclaré ${money(x.amount)}.</p><label>Montant à valider (FC)</label><input id="fa" type="number" min="0" step="500" value="${x.amount}"><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn em" data-act="fixsave" data-v="${x.id}">Corriger &amp; valider</button></div>`)},
+ fixsave:e=>{const x=S.rec.find(r=>r.id==e.dataset.v),v=Math.max(0,+val('fa')||0);x.st='ok';x.val=v;x.vat=Date.now();log(`Recette de ${x.rid} corrigée : ${money(x.amount)} → ${money(v)}`);save();closeM();render();toast('Montant corrigé et validé.')},
+ uadd:()=>userModal(null),uedit:e=>userModal(e.dataset.v),
+ usave:async e=>{const o=e.dataset.v,g=k=>val('u_'+k).trim(),id=g('id').toUpperCase();if(!id||!g('first')||!g('name')){toast('Remplissez identifiant, prénom et nom.');return}
+  if(!/^[A-Z0-9-]{3,20}$/.test(id)){toast('Identifiant : 3 à 20 lettres, chiffres ou tirets.');return}
+  if(S.riders.some(r=>r.id===id&&r.id!==o)||(S.admin&&S.admin.id===id)){toast('Cet identifiant existe déjà.');return}
+  const pw=val('u_pass');if(!o&&pw.length<6){toast('Mot de passe initial : 6 caractères minimum.');return}if(o&&pw&&pw.length<6){toast('Mot de passe : 6 caractères minimum.');return}
+  const f={id,first:g('first'),name:g('name'),birth:g('birth')||'1995-01-01',sex:g('sex'),phone:g('phone'),email:g('email'),addr:g('addr'),licence:g('licence'),moto:g('moto'),role:g('role'),status:g('status')};if(pw)f.ph=await H(pw);
+  if(o){const r=S.riders.find(x=>x.id===o);Object.assign(r,f);if(UPH)r.photo=UPH;if(o!==id){S.rec.forEach(x=>{if(x.rid===o)x.rid=id});S.msgs.forEach(m=>{if(m.from===o)m.from=id;if(m.ch==='dm:'+o)m.ch='dm:'+id});if(S.sess&&S.sess.id===o)S.sess.id=id}log(`Profil de ${id} modifié par l'administrateur${pw?' (mot de passe réinitialisé)':''}`)}
+  else{S.riders.push({...f,joined:Date.now(),photo:UPH,bio:'',conns:[],seen:0});log(`Nouveau motard ajouté : ${id}`)}
+  save();closeM();render();toast('Profil enregistré.')},
+ ptab:e=>{PT=e.dataset.v;render()},
+ theme:()=>{S.theme=S.theme==='light'?'dark':'light';document.documentElement.dataset.theme=S.theme;save();render()},
+ bio:()=>{me().bio=val('bio').trim();save();render();toast('Biographie enregistrée.')},
+ mail:()=>toast("Mot de passe oublié ? Contactez l'administration (onglet Messages) : elle peut le réinitialiser."),
+ pwd:()=>modal(`<h3>Modifier le mot de passe</h3><div class="fg"><label>Ancien mot de passe</label><input id="p0" type="password"></div><div class="fg"><label>Nouveau mot de passe (6 caractères min.)</label><input id="p1" type="password"></div><div class="fg"><label>Confirmer</label><input id="p2" type="password"></div><div class="err" id="pe"></div><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="pwdsave">Enregistrer</button></div>`),
+ pwdsave:async()=>{const r=me(),e=m=>$('#pe').textContent=m;if(await H(val('p0'))!==r.ph)return e('Ancien mot de passe incorrect.');if(val('p1').length<6)return e('Le nouveau mot de passe est trop court (6 caractères min.).');if(val('p1')!==val('p2'))return e('Les deux mots de passe ne correspondent pas.');r.ph=await H(val('p1'));log('Mot de passe modifié');save();closeM();toast('Mot de passe mis à jour.')},
+ avatar:()=>{AVM={img:null,z:1,p:null,src:av(me())};modal(`<h3>Photo de profil</h3><div style="text-align:center"><img id="avp" src="${AVM.src}" alt="" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--em)"></div>
+  <label style="margin-top:14px">Importer une image (JPG ou PNG, recadrée en carré)</label><input id="avf" type="file" accept="image/png,image/jpeg"><label style="margin-top:10px">Zoom</label><input id="avz" type="range" min="1" max="3" step=".05" value="1" data-in="avz">
+  <label style="margin-top:10px">Ou choisissez un avatar</label><div class="prs">${PRS.map((_,i)=>`<button data-act="prs" data-v="${i}" aria-label="Avatar ${i+1}"><img src="${prs(i)}" alt=""></button>`).join('')}</div>
+  <div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" id="avs" data-act="avsave">Enregistrer</button></div>`)},
+ prs:e=>{AVM.p=+e.dataset.v;AVM.img=null;AVM.src=prs(AVM.p);$('#avp').src=AVM.src;document.querySelectorAll('.prs button').forEach(b=>b.classList.toggle('on',b===e))},
+ avsave:()=>{const b=$('#avs');b.innerHTML='<span class="spin"></span> Envoi…';b.disabled=true;setTimeout(()=>{me().photo=AVM.src;log('Photo de profil modifiée');save();closeM();render();toast('Photo de profil mise à jour avec succès')},1200)},
+ tstart:()=>{S.trip={rid:S.sess.id,start:Date.now(),pts:[],km:0,spd:0,groups:[],gid:1,nav:null};ASTT=Math.max(0,S.ast.every-5);save();startGps();render();toast('Trajet démarré. Bonne route !')},
+ 
+ take:()=>{const n=Math.max(1,Math.min(4,+val('pn')||1)),a=Math.max(0,+val('pa')||0);if(!a){toast('Indiquez le montant par personne.');return}takePax(n,a);toast(`${n} personne(s) à bord.`)},
+ drop:e=>{const g=S.trip.groups.find(x=>x.id==e.dataset.v);dropGroup(g);toast(`Déposé : +${money(g.n*g.amt)}`)},
+ tend:()=>{const ab=S.trip.groups.filter(g=>!g.drop).length;ask(ab?'Des passagers sont encore à bord : ils seront considérés comme déposés. Terminer le trajet ?':'Terminer ce trajet ?',()=>{doEnd()})},
+ dest:e=>{const t=S.trip;if(!t||!t.pts.length){toast('En attente du signal GPS…');return}setDest(S.zones.find(z=>z.k===e.dataset.v))},
+ ndest:()=>{S.trip.nav=null;save();render()},
+ net:()=>{if(!S.offline){snapshot();S.offline=true;save();toast("✈️ Mode 0 méga : vos actions sont enregistrées sur l'appareil.");render()}else{S.offline=false;save();toast('📶 Connexion rétablie…');flush()}},
+ peer:()=>{S.set.peerCalls=!S.set.peerCalls;log(`Appels entre participants ${S.set.peerCalls?'autorisés':'interdits'}`);save();render()},
+ fleet:e=>{SEL=e.dataset.v||null;render()},
+ mtab:e=>{MT=e.dataset.v;render()},
+ ch:e=>{CH=e.dataset.v;LIM=20;render()},
+ cback:()=>{CH=null;render()},
+ more:()=>{LIM+=20;render()},
+ msend:()=>{const i=$('#mi');if(!i)return;const tx=i.value.trim();if(!tx)return;S.drafts[CH]='';post(CH,{type:'text',text:tx})},
+ mic:()=>{REC?recStop(true):recStart()},
+ mstop:()=>recStop(true),
+ mcancel:()=>recStop(false),
+ react:e=>{const m=S.msgs.find(x=>x.id==e.dataset.v),k=e.dataset.e;m.react=m.react||{};const l=m.react[k]=m.react[k]||[],v=vid(),i=l.indexOf(v);i<0?l.push(v):l.splice(i,1);save();render()},
+ aplay:async e=>{const id=+e.dataset.v,m=S.msgs.find(x=>x.id===id);if(PL&&PL.id===id){plStop();return}plStop();const bl=await idbGet(id);if(!bl){toast("Note vocale introuvable sur cet appareil (enregistrée depuis un autre appareil).");return}
+  PL={id,rate:RS[id]||1,t:0};const a=new Audio(URL.createObjectURL(bl));a.playbackRate=PL.rate;PL.el=a;a.ontimeupdate=()=>plProg(a.currentTime/(isFinite(a.duration)&&a.duration>0?a.duration:m.aud.dur));a.onended=plStop;a.play().catch(err=>{toast('Lecture impossible ('+(err.name||'erreur')+').');plStop()});syncPl()},
+ aspd:e=>{const id=+e.dataset.v;RS[id]=RATES[(RATES.indexOf(RS[id]||1)+1)%3];if(PL&&PL.id===id){PL.rate=RS[id];if(PL.el)PL.el.playbackRate=PL.rate}e.textContent='x'+RS[id]},
+ call:e=>{const p=e.dataset.v,tel=p==='admin'?(S.admin&&S.admin.phone):rd(p).phone;if(!tel){toast('Numéro de téléphone non renseigné.');return}location.href='tel:'+String(tel).replace(/[^+\d]/g,'')},
+ 
+ cans:()=>{CALL.st='live';CALL.t0=Date.now();ringTone(false);render()},
+ cend:()=>endCall(),
+ cmute:()=>{CALL.mute=!CALL.mute;callBar()},
+ cspk:()=>{CALL.spk=!CALL.spk;callBar()},
+ decl:()=>declModal(''),
+ dmic:e=>{if(AS.listening){AS.hands=false;try{SR_.stop()}catch(x){}}if(AS.dl){SR_&&SR_.stop();return}const ok=stt(s=>{const x=$('#dtx');if(x)x.value=s;DECL=parseDecl(s);fillDecl()},err=>{AS.dl=false;const b=$('#dmic');if(b)b.textContent='🎙️ Appuyer pour dicter';if(err&&err!=='aborted'&&err!=='no-speech')toast(srMsg(err)||'Micro indisponible : écrivez votre texte dans la zone.')});if(ok){AS.dl=true;e.textContent='⏹ Arrêter la dictée'}else toast('Reconnaissance vocale indisponible ici : écrivez votre texte dans la zone.')},
+ dsave:()=>{const rev=+val('dr')||0,c=+val('dc')||0,f=+val('df')||0,z=val('dz').trim();if(rev<=0){toast('Indiquez la recette de la journée.');return}
+  S.rec.push({id:S.nextRec++,rid:S.sess.id,amount:rev,pax:0,km:null,courses:c,fuel:f,zones:z,ts:Date.now(),st:'wait',val:0,vat:0,sync:online(),proof:`Déclaration vocale · ${c} courses${f?' · carburant '+money(f):''}${z?' · '+z:''}`});
+  log(`Déclaration de journée : ${money(rev)}`);save();closeM();render();toast(online()?'Déclaration envoyée pour validation.':'🕓 Déclaration enregistrée hors-ligne : envoi au retour du réseau.')},
+ ast:()=>{AS.open=!AS.open;renderAst()},aclose:()=>{AS.open=false;renderAst()},
+ avoice:()=>{S.ast.voice=!S.ast.voice;if(!S.ast.voice&&window.speechSynthesis)speechSynthesis.cancel();save();renderAst()},
+ achip:e=>handle(e.dataset.v),
+ asend:()=>{const i=$('#ai');if(i&&i.value.trim()){const v=i.value;i.value='';handle(v)}},
+ alisten:()=>{if(AS.listening||AS.hands){AS.hands=false;try{SR_&&SR_.stop()}catch(e){}AS.listening=false;renderAst();return}unlock();if(window.speechSynthesis)speechSynthesis.cancel();AS.hands=true;listenStart()},
+ vtest:()=>{unlock();if(!window.speechSynthesis){say("Ce navigateur ne propose pas la synthèse vocale : lisez les réponses à l'écran.");return}pickVoice();if(!VOICE)AS.log.push({w:'bot',t:'Aucune voix française installée : voix par défaut utilisée (installez une voix française dans les réglages du téléphone).'});S.ast.voice=true;say("Bonjour, je suis l'assistant G5. Vous m'entendez bien ?")},
+ mtest:async()=>{try{const st=await navigator.mediaDevices.getUserMedia({audio:true}),c=new (window.AudioContext||window.webkitAudioContext)(),an=c.createAnalyser();c.createMediaStreamSource(st).connect(an);const b=new Uint8Array(an.frequencyBinCount);let mx=0;AS.log.push({w:'bot',t:'Test du micro : parlez pendant 3 secondes…'});renderAst();const iv=setInterval(()=>{an.getByteTimeDomainData(b);b.forEach(v=>mx=Math.max(mx,Math.abs(v-128)))},100);setTimeout(()=>{clearInterval(iv);st.getTracks().forEach(t=>t.stop());c.close();say(mx>8?'Micro OK : votre voix est bien captée.':"Le micro est autorisé mais je n'entends rien : parlez plus fort ou vérifiez le micro.")},3000)}catch(e){say(micMsg(e))}}
+};
+function restoreFile(f){if(!f)return;const r=new FileReader();r.onload=()=>{let d;try{d=JSON.parse(r.result)}catch(e){toast('Fichier illisible.');return}if(!d||!Array.isArray(d.riders)||!Array.isArray(d.rec)||!d.admin){toast("Ce fichier n'est pas une sauvegarde G5 valide.");return}ask(`Restaurer cette sauvegarde (${d.riders.length} participant(s)) ? Les données actuelles seront remplacées.`,()=>{stopGps();const th=S.theme;S=ext(d);S.theme=d.theme||th;S.sess={role:'admin'};S.trip=null;PAGE=null;log('Sauvegarde restaurée');save();closeM();render();toast('Sauvegarde restaurée.')})};r.readAsText(f)}
+function userModal(id){const r=id?S.riders.find(x=>x.id===id):{id:'G5-'+String(Math.max(0,...S.riders.map(x=>+x.id.slice(3)||0))+1).padStart(3,'0'),pass:'',first:'',name:'',birth:'1995-01-01',sex:'M',phone:'+243 ',email:'',addr:'',licence:'LIC-2026-',moto:'',role:'Joueur Titulaire',status:'Actif'};
+ const i=(k,l,t='text')=>`<div><label>${l}</label><input id="u_${k}" type="${t}" value="${esc(r[k])}"></div>`,s=(k,l,o)=>`<div><label>${l}</label><select id="u_${k}">${o.map(v=>`<option ${v===r[k]?'selected':''}>${v}</option>`).join('')}</select></div>`;
+ UPH=null;modal(`<h3>${id?'Modifier le motard':'Ajouter un motard'}<button class="btn ghost sm" data-act="close">✕</button></h3><div class="f2">${i('id','ID unique')}${i('pass',id?'Nouveau mot de passe (vide = inchangé)':'Mot de passe initial (6 car. min.)')}${i('first','Prénom')}${i('name','Nom')}${i('birth','Date de naissance','date')}${s('sex','Sexe',['M','F'])}${i('phone','Téléphone')}${i('email','E-mail','email')}${i('moto','Modèle de moto')}${i('licence','N° de licence')}${s('role','Rôle',['Capitaine','Joueur Titulaire','Remplaçant'])}${s('status','Statut du compte',['Actif','En pause','Banni'])}</div><div style="margin-top:12px">${i('addr','Adresse')}</div><div style="margin-top:12px"><label>Photo (JPG ou PNG)</label><input id="uph" type="file" accept="image/png,image/jpeg"></div><div class="mf"><button class="btn ghost" data-act="close">Annuler</button><button class="btn" data-act="usave" data-v="${id||''}">Enregistrer</button></div>`)}
+const I={uq:t=>{UQ=t.value;const p=t.selectionStart;render();const n=$('#uq');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(e){}}},draft:t=>{S.drafts[CH]=t.value;saveL()},dtx:t=>{DECL=parseDecl(t.value);fillDecl()},apro:t=>{S.ast.on=t.checked;save()},aev:t=>{S.ast.every=+t.value;ASTT=0;save()},calc:()=>{$('#tot').textContent=money((+val('pn')||0)*(+val('pa')||0))},avz:()=>{AVM.z=+val('avz');if(AVM.img){AVM.src=sq(AVM.img,256,AVM.z);$('#avp').src=AVM.src}}};
+document.addEventListener('click',e=>{unlock();const el=e.target.closest('[data-act]');if(el&&A[el.dataset.act])A[el.dataset.act](el);if(e.target.id==='modal')closeM()});
+document.addEventListener('input',e=>{const f=I[e.target.dataset.in];if(f)f(e.target)});
+document.addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(e.target.id==='avf')readImg(f,i=>{AVM.img=i;AVM.p=null;AVM.src=sq(i,256,AVM.z=1);$('#avp').src=AVM.src;$('#avz').value=1});if(e.target.id==='uph')readImg(f,i=>{UPH=sq(i,256,1);toast('Photo prête, pensez à enregistrer.')});if(e.target.id==='rst'){restoreFile(f);e.target.value=''}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();if(e.key==='Enter'&&e.target.id==='mi')A.msend();if(e.key==='Enter'&&e.target.id==='ai')A.asend()});
+$('#lf').addEventListener('submit',async e=>{e.preventDefault();const u=val('lu').trim().toUpperCase(),p=val('lp'),er=$('#le'),k=(LR==='admin'?'A:':'R:')+u,L=S.lock[k]||{n:0,until:0};
+ if(L.until>Date.now()){er.textContent='Trop de tentatives. Réessayez dans '+Math.ceil((L.until-Date.now())/6e4)+' min.';return}
+ const h=await H(p),fail=m=>{L.n++;if(L.n>=5){L.until=Date.now()+3e5;L.n=0}S.lock[k]=L;er.textContent=m;save()};
+ if(LR==='admin'){if(S.admin&&u===S.admin.id&&h===S.admin.ph){delete S.lock[k];S.sess={role:'admin'};log('Connexion administrateur');PAGE=null;$('#lp').value='';save();render()}else{log('Échec de connexion administrateur',1);fail('Identifiants administrateur incorrects.')}return}
+ const r=S.riders.find(x=>x.id===u);
+ if(!r||r.ph!==h){if(r){r.conns.unshift({ts:Date.now(),dev:devName(),ok:0});r.conns=r.conns.slice(0,20);log(`Échec de connexion sur ${r.id}`,1)}fail('Identifiant ou mot de passe incorrect.');return}
+ if(r.status==='Banni'){er.textContent="Ce compte est suspendu. Contactez l'administration.";return}
+ delete S.lock[k];r.conns.unshift({ts:Date.now(),dev:devName(),ok:1});r.conns=r.conns.slice(0,20);r.seen=Date.now();S.sess={role:'rider',id:r.id};PAGE=null;$('#lp').value='';save();render()});
+$('#sf').addEventListener('submit',async e=>{e.preventDefault();const g=i=>val(i).trim(),er=$('#se'),id=g('si').toUpperCase(),p=val('sp');
+ if(!/^[A-Z0-9-]{3,20}$/.test(id)){er.textContent='Identifiant : 3 à 20 lettres, chiffres ou tirets.';return}
+ if(p.length<8){er.textContent='Mot de passe : 8 caractères minimum.';return}
+ if(p!==val('sp2')){er.textContent='Les deux mots de passe ne correspondent pas.';return}
+ S.admin={id,ph:await H(p),phone:g('sph'),email:g('sm')};S.sess={role:'admin'};PAGE=null;log('Compte administrateur créé');save();render()});
+load();if(S.trip&&S.sess&&S.sess.role==='rider')startGps();addEventListener('online',()=>{if(!S.offline)flush()});addEventListener('offline',()=>{save();render()});addEventListener('pagehide',()=>save());render();
+</script>
+</body>
+</html>
